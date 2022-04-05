@@ -20,6 +20,7 @@ on:
       # GITHUB_TOKEN:
       #   required: true
       GITGUARDIAN_API_KEY:
+        description: API key used for authenticating against the GitGuardian APIs
         required: true
 
 concurrency:

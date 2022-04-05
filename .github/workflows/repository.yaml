@@ -13,8 +13,10 @@ on:
   workflow_call:
     secrets:
       REPOSITORY_ASSISTANT_APP_ID:
+        description: The application ID of the repository assistant GitHub app
         required: true
       REPOSITORY_ASSISTANT_PRIVATE_KEY:
+        description: The private key of the repository assistant GitHub app
         required: true
 
 concurrency:
