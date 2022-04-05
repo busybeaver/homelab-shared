@@ -16,9 +16,9 @@ on:
   # allows to reuse the workflow in other repositories
   workflow_call:
     secrets:
-      GITHUB_TOKEN:
-        # necessary permissions: 'contents: read' and 'statuses: write'
-        required: true
+      # necessary permissions: 'contents: read' and 'statuses: write'
+      # GITHUB_TOKEN:
+      #   required: true
       GITGUARDIAN_API_KEY:
         required: true
 
