@@ -50,7 +50,7 @@ jobs:
     permissions:
       contents: read
       statuses: write
-      
+
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
