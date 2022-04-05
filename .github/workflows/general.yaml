@@ -15,6 +15,15 @@ on:
     - cron: '0 12 * * 1'
   # allows to reuse the workflow in other repositories
   workflow_call:
+    inputs:
+      filterRegexExlude:
+        description: 'Regular expression defining which files will be excluded from linting'
+        type: string
+        default: none
+      lintTypescript:
+        description: 'Flag to enable or disable the linting process of the TypeScript language. (Utilizing: eslint)'
+        type: boolean
+        default: false
     secrets:
       # necessary permissions: 'contents: read' and 'statuses: write'
       # GITHUB_TOKEN:
@@ -56,6 +65,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          FILTER_REGEX_EXCLUDE: ${{ github.event_name == 'workflow_dispatch' && inputs.filterRegexExlude || 'none' }}
+          TYPESCRIPT_DEFAULT_STYLE: prettier
           VALIDATE_ALL_CODEBASE: ${{ github.event_name != 'pull_request' }}
           VALIDATE_BASH: true
           VALIDATE_EDITORCONFIG: true
@@ -65,6 +76,8 @@ jobs:
           VALIDATE_MARKDOWN: true
           VALIDATE_NATURAL_LANGUAGE: true
           VALIDATE_SHELL_SHFMT: true
+          # https://github.com/actions/runner/issues/409#issuecomment-752775072
+          VALIDATE_TYPESCRIPT_ES: ${{ github.event_name == 'workflow_dispatch' && inputs.lintTypescript || 'false' }}
           VALIDATE_YAML: true
 
   git_secrets:
