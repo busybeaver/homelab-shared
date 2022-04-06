@@ -67,6 +67,8 @@ jobs:
       VALIDATE_NATURAL_LANGUAGE: true
       VALIDATE_SHELL_SHFMT: true
       VALIDATE_YAML: true
+      TEST_1: github.event_name
+      TEST_2: inputs.filterRegexExlude
 
     steps:
       - name: Git - Checkout
