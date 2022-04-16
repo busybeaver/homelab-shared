@@ -9,6 +9,8 @@ on:
   # run weekly on Monday at 12:00
   schedule:
     - cron: '0 12 * * 1'
+  # run manually
+  workflow_dispatch:
 
 jobs:
   sync_config:
