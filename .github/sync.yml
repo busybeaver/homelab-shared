@@ -3,7 +3,7 @@ group:
     busybeaver/homelab-iac
     busybeaver/homelab-packages
   files:
-    - -github/linters/
+    - .github/linters/
     - .github/act_event.json
     - .github/CODEOWNERS
     - .actrc
