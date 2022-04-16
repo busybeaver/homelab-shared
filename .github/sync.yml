@@ -1,0 +1,9 @@
+group:
+  repos: |
+    busybeaver/homelab-iac
+    busybeaver/homelab-packages
+  files:
+    - .github/act_event.json
+    - .github/CODEOWNERS
+    - .actrc
+    - .editorconfig
