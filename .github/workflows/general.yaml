@@ -55,7 +55,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
       # https://github.com/actions/runner/issues/409#issuecomment-752775072
-      FILTER_REGEX_EXCLUDE: ${{ github.event_name == 'workflow_dispatch' && inputs.filterRegexExlude || 'none' }}
+      FILTER_REGEX_EXCLUDE: ${{ inputs.filterRegexExlude || 'none' }}
       TYPESCRIPT_DEFAULT_STYLE: prettier
       VALIDATE_ALL_CODEBASE: ${{ github.event_name != 'pull_request' }}
       VALIDATE_BASH: true
@@ -67,8 +67,6 @@ jobs:
       VALIDATE_NATURAL_LANGUAGE: true
       VALIDATE_SHELL_SHFMT: true
       VALIDATE_YAML: true
-      TEST_1: ${{ github.event_name }}
-      TEST_2: ${{ inputs.filterRegexExlude }}
 
     steps:
       - name: Git - Checkout
@@ -81,7 +79,7 @@ jobs:
       - name: SuperLinter - Lint Files
         id: superlinter_scan_with_ts
         uses: github/super-linter/slim@ae4e373c56efad95924d9cc6b89624fdb2333007 # tag=v4
-        if: github.event_name == 'workflow_dispatch' && inputs.lintTypescript
+        if: inputs.lintTypescript == true
         env:
           # the VALIDATE_* env variables cannot be mixed with true and false (so we cannot set it conditionally;
           # as an alternative, we run the same github action but with different if statements
@@ -90,7 +88,7 @@ jobs:
       - name: SuperLinter - Lint Files
         id: superlinter_scan_without_ts
         uses: github/super-linter/slim@ae4e373c56efad95924d9cc6b89624fdb2333007 # tag=v4
-        if: github.event_name != 'workflow_dispatch' || inputs.lintTypescript
+        if: inputs.lintTypescript != true
 
   git_secrets:
     name: 'Git Secret Exposure Checks'
