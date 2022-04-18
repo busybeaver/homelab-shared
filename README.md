@@ -15,10 +15,10 @@ For other operating systems, have a look at the installation section in the [jus
 Subsequently, setup the repository:
 
 ```shell
-# install the required tooling: the install step uses brew and therefore works only on macos;
+# 1) install the required tooling: the install step uses brew and therefore works only on macos;
 # on other operation systems check the needed tools in the justfile.shared and install these manually
 just install
-# initialize the tooling
+# 2) initialize the tooling
 just init
 ```
 
