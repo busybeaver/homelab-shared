@@ -6,6 +6,7 @@ group:
     - .github/linters/
     - .github/act_event.json
     - .github/CODEOWNERS
+    - .github/justfile.shared
     - .lefthook/
     - .actrc
     - .editorconfig
