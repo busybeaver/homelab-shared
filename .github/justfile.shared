@@ -1,4 +1,4 @@
-# tools setup via brew for macos
+# tool installation via brew for macos
 install:
   brew install just lefthook dprint act httpie
 
