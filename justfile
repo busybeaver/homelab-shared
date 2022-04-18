@@ -14,7 +14,6 @@ _run_shared cmd *args:
 
 install:
   @just _run_shared install
-  brew install pulumi snapcraft git-crypt fnm
 
 initialize:
   @just _run_shared initialize
