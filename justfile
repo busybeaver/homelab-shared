@@ -14,7 +14,7 @@ _run_shared cmd *args:
 
 # install all required tooling for development (osx only)
 install:
-  @just _run_shared install snapcraft
+  @just _run_shared install
 
 # initializes the tooling for working with this repository
 initialize:
