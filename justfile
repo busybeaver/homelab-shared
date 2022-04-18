@@ -9,11 +9,12 @@ set shell := ["zsh", "-cu"]
 alias init := initialize
 alias fmt := format
 
-_run_shared cmd:
-  @just -f {{justfile_directory()}}/.github/justfile.shared -d {{justfile_directory()}} {{cmd}}
+_run_shared cmd *args:
+  @just -f {{justfile_directory()}}/.github/justfile.shared -d {{justfile_directory()}} {{cmd}} {{args}}
 
 install:
   @just _run_shared install
+  brew install pulumi snapcraft git-crypt fnm
 
 initialize:
   @just _run_shared initialize

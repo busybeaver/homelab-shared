@@ -11,5 +11,5 @@ format:
 check:
   dprint check
 
-ci event=push *args:
-  act {{event}} {{args}}
+ci +args='push':
+  act {{args}}
