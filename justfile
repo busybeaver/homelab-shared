@@ -19,14 +19,14 @@ install:
 initialize:
   @just _run_shared initialize
 
-# formats files according to the used standards and rules
+# formats files according to the used standards and rules; if the optional files parameter is provided, only the specified files are formatted; else all files are formatted
 format *files:
   @just _run_shared format {{files}}
 
-# checks if the files comply to the used standards and rules
+# checks if the files comply to the used standards and rules; if the optional files parameter is provided, only the specified files are checked; else all files are checked
 check *files:
   @just _run_shared check {{files}}
 
-# runs the CI workflows locally
+# runs the CI workflows locally; the optinal args parameter allows to add additional optional arguments
 ci *args:
   @just _run_shared ci {{args}}
