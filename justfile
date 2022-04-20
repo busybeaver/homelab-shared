@@ -27,6 +27,6 @@ format *files:
 check *files:
   @just _run_shared check {{files}}
 
-# runs the CI workflows locally; the optinal args parameter allows to add additional optional arguments
+# runs the CI workflows locally; the optional args parameter allows to add additional optional arguments
 ci *args:
   @just _run_shared ci {{args}}

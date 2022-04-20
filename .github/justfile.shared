@@ -17,6 +17,6 @@ format *files:
 check *files:
   dprint check {{files}}
 
-# runs the CI workflows locally; the optinal args parameter allows to add additional optional arguments
+# runs the CI workflows locally; the optional args parameter allows to add additional optional arguments
 ci +args='push':
   act {{args}}
