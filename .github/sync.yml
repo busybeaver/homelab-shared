@@ -9,5 +9,6 @@ group:
     - .github/justfile.shared
     - .lefthook/
     - .actrc
+    - .comet.json
     - .editorconfig
     - dprint.json
