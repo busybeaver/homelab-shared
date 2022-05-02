@@ -16,6 +16,10 @@ _run_shared cmd *args:
 install:
   @just _run_shared install
 
+# uninstall all required tooling for development (osx only)
+uninstall:
+  @just _run_shared uninstall
+
 # initializes the tooling for working with this repository
 initialize:
   @just _run_shared initialize
