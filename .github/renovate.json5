@@ -1,17 +1,17 @@
 {
   "extends": [
-    "config:base",
+    "config:js-app",
     ":semanticCommits",
     ":semanticPrefixFixDepsChoreOthers",
     ":rebaseStalePrs",
     ":prHourlyLimit4",
     ":prConcurrentLimit10",
+    ":maintainLockFilesWeekly",
     ":enableVulnerabilityAlerts",
     ":disableDependencyDashboard",
-    "helpers:pinGitHubActionDigests"
+    "helpers:pinGitHubActionDigests",
   ],
   "labels": ["dependencies"],
-  "rebaseWhen": "behind-base-branch",
   "rollbackPrs": true,
   "packageRules": [
     {
@@ -19,7 +19,7 @@
       "matchUpdateTypes": ["pin", "lockFileMaintenance"],
       "stabilityDays": 0,
       "assignees": ["busybeaver"],
-      "reviewers": ["repository-assistant[bot]"]
+      "reviewers": ["repository-assistant[bot]"],
     },
     {
       "description": "Minor and patch-level updates with usually no breaking changes",
@@ -27,7 +27,7 @@
       // npm packages less than 72 hours (3 days) old can be unpublished
       "stabilityDays": 3,
       "assignees": ["busybeaver"],
-      "reviewers": ["repository-assistant[bot]"]
+      "reviewers": ["repository-assistant[bot]"],
     },
     {
       "description": "Major updates with potentially breaking changes",
@@ -35,7 +35,7 @@
       "stabilityDays": 5,
       "assignees": ["busybeaver"],
       "reviewers": ["busybeaver"],
-      "addLabels": ["major-update"]
+      "addLabels": ["major-update"],
     }
-  ]
+  ],
 }
