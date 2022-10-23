@@ -39,3 +39,6 @@ commit *args:
 # runs the CI workflows locally; the optional args parameter allows to add additional optional arguments
 ci *args:
   @just _run_shared ci {{args}}
+
+dprint_update:
+  dprint config update
