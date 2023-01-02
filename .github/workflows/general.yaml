@@ -25,11 +25,17 @@ on:
         type: boolean
         default: false
     secrets:
-      # necessary permissions: 'contents: read' and 'statuses: write'
+      # necessary permissions: 'contents: read', 'statuses: write', packages: write
       # GITHUB_TOKEN:
       #   required: true
       GITGUARDIAN_API_KEY:
         description: API key used for authenticating against the GitGuardian APIs
+        required: true
+      COSIGN_PRIVATE_KEY:
+        description: The Cosign private key for signing artifacts
+        required: true
+      COSIGN_PASSWORD:
+        description: Password to use the Cosign private key
         required: true
 
 concurrency:
@@ -176,23 +182,19 @@ jobs:
 
       - name: Cosign - Upload and Sign Public Key
         id: cosign_sign
-        # if: ${{ github.event_name == 'pull_request' }}
         run: |
-          echo ${{ github.event_name }}
           ARTIFACT="${{ env.REGISTRY }}/${{ github.repository }}/cosign.pub"
-
+          cosign upload blob -f cosign.pub \
+            -a "repo=${{ github.repository }}" \
+            -a "workflow=${{ github.workflow }}" \
+            -a "ref=${{ github.sha }}" \
+            "${ARTIFACT}"
+          cosign sign --key env://COSIGN_PRIVATE_KEY \
+            -a "repo=${{ github.repository }}" \
+            -a "workflow=${{ github.workflow }}" \
+            -a "ref=${{ github.sha }}" \
+            "${ARTIFACT}"
         working-directory: ./public_key/
-        # env:
-        #   COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
-        #   COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
-
-          # cosign upload blob -f cosign.pub \
-          #   -a "repo=${{ github.repository }}" \
-          #   -a "workflow=${{ github.workflow }}" \
-          #   -a "ref=${{ github.sha }}" \
-          #   "${ARTIFACT}"
-          # cosign sign --key env://COSIGN_PRIVATE_KEY \
-          #   -a "repo=${{ github.repository }}" \
-          #   -a "workflow=${{ github.workflow }}" \
-          #   -a "ref=${{ github.sha }}" \
-          #   "${ARTIFACT}"
+        env:
+          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
