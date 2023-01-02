@@ -120,3 +120,35 @@ jobs:
           GITHUB_PULL_BASE_SHA: ${{ github.event.pull_request.base.sha }}
           GITHUB_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
           GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
+
+  public_key_verification:
+    name: 'Public Key Verification'
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: '.'
+
+    permissions:
+      contents: read
+
+    env:
+      COSIGN_VERSION: v1.13.1
+
+    steps:
+      - name: Git - Checkout
+        id: git_checkout
+        uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b # v3.2.0
+
+      - name: Cosign - Setup
+        id: cosign_setup
+        uses: sigstore/cosign-installer@9becc617647dfa20ae7b1151972e9b3a2c338a2b # v2.8.1
+        with:
+          cosign-release: ${{ env.COSIGN_VERSION }}
+
+      - name: Cosign - Verify Public Key
+        id: cosign_verify
+        run: |
+          cd ./public_key/
+          cosign verify-blob --key cosign.pub --signature $(cat cosign.pub.sig) cosign.pub
