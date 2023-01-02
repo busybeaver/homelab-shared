@@ -184,12 +184,12 @@ jobs:
         id: cosign_sign
         run: |
           ARTIFACT="${{ env.REGISTRY }}/${{ github.repository }}/cosign.pub"
-          cosign upload blob -f cosign.pub \
+          cosign upload blob -f cosign.pub --verbose \
             -a "repo=${{ github.repository }}" \
             -a "workflow=${{ github.workflow }}" \
             -a "ref=${{ github.sha }}" \
             "${ARTIFACT}"
-          cosign sign --key env://COSIGN_PRIVATE_KEY \
+          cosign sign --key env://COSIGN_PRIVATE_KEY --verbose \
             -a "repo=${{ github.repository }}" \
             -a "workflow=${{ github.workflow }}" \
             -a "ref=${{ github.sha }}" \
