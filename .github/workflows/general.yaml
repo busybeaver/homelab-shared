@@ -151,4 +151,4 @@ jobs:
         id: cosign_verify
         run: |
           cd ./public_key/
-          cosign verify-blob --key cosign.pub --signature $(cat cosign.pub.sig) cosign.pub
+          cosign verify-blob --key cosign.pub --signature "$(cat cosign.pub.sig)" cosign.pub
