@@ -25,17 +25,11 @@ on:
         type: boolean
         default: false
     secrets:
-      # necessary permissions: 'contents: read', 'statuses: write', packages: write
+      # necessary permissions: 'contents: read', 'statuses: write'
       # GITHUB_TOKEN:
       #   required: true
       GITGUARDIAN_API_KEY:
         description: API key used for authenticating against the GitGuardian APIs
-        required: true
-      COSIGN_PRIVATE_KEY:
-        description: The Cosign private key for signing artifacts
-        required: true
-      COSIGN_PASSWORD:
-        description: Password to use the Cosign private key
         required: true
 
 concurrency:
@@ -138,11 +132,9 @@ jobs:
 
     permissions:
       contents: read
-      packages: write
 
     env:
       COSIGN_VERSION: v1.13.1
-      REGISTRY: ghcr.io # GitHub Registry
 
     steps:
       - name: Git - Checkout
@@ -163,38 +155,3 @@ jobs:
         run: |
           cosign verify-blob --key cosign.pub --signature "$(cat cosign.pub.sig)" cosign.pub
         working-directory: ./public_key/
-
-      - name: Git - Get Changed Files
-        id: git_changed_files
-        uses: tj-actions/changed-files@ce4b8e3cba2220de8132ac9721ff754efd6bb7d7 # v34.6.2
-        with:
-          files: |
-            ./public_key/cosign.pub
-
-      - name: Docker - Log into Registry
-        id: docker_login
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a # tag=v2.1.0
-        # if: steps.git_changed_files.outputs.any_changed == 'true'
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Cosign - Upload and Sign Public Key
-        id: cosign_sign
-        run: |
-          ARTIFACT="${{ env.REGISTRY }}/${{ github.repository }}/cosign.pub"
-          cosign upload blob -f cosign.pub --verbose \
-            -a "repo=${{ github.repository }}" \
-            -a "workflow=${{ github.workflow }}" \
-            -a "ref=${{ github.sha }}" \
-            "${ARTIFACT}"
-          cosign sign --key env://COSIGN_PRIVATE_KEY --verbose \
-            -a "repo=${{ github.repository }}" \
-            -a "workflow=${{ github.workflow }}" \
-            -a "ref=${{ github.sha }}" \
-            "${ARTIFACT}"
-        working-directory: ./public_key/
-        env:
-          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
-          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
