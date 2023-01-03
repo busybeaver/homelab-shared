@@ -5,6 +5,7 @@ on:
     types:
       - opened
       - synchronize
+      - edited
       - reopened
       # - review_requested
     branches:
@@ -79,3 +80,28 @@ jobs:
           token: ${{ steps.github_generate_app_token.outputs.token }}
           pull-request-number: ${{ github.event.pull_request.number }}
           merge-method: squash
+
+  semantic_pull_request:
+    name: 'Semantic Pull Request Title'
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: '.'
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: GitHub - Generate App Token
+        id: github_generate_app_token
+        uses: tibdex/github-app-token@021a2405c7f990db57f5eae5397423dcc554159c # tag=v1.7.0
+        with:
+          app_id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
+          private_key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
+
+      - name: GitHub - Semantic Pull Request
+        uses: amannn/action-semantic-pull-request@v5.0.2
+        env:
+          GITHUB_TOKEN: ${{ steps.github_generate_app_token.outputs.token }}
