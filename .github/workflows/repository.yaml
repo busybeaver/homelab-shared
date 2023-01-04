@@ -94,6 +94,10 @@ jobs:
       contents: read
 
     steps:
+      - name: test 123
+        run: |
+          echo ${{ github.event_name }}
+
       - name: GitHub - Generate App Token
         id: github_generate_app_token
         uses: tibdex/github-app-token@021a2405c7f990db57f5eae5397423dcc554159c # tag=v1.7.0
