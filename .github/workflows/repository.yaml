@@ -115,6 +115,7 @@ jobs:
           private_key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
 
       - name: GitHub - Semantic Pull Request
+        id: github_semantic_pull_request
         uses: amannn/action-semantic-pull-request@01d5fd8a8ebb9aafe902c40c53f0f4744f7381eb # v5.0.2
         env:
           GITHUB_TOKEN: ${{ steps.github_generate_app_token.outputs.token }}
@@ -142,6 +143,7 @@ jobs:
           private_key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
 
       - name: GitHub - Conventional Commit Messages
+        id: github_conventional_commit_messages
         uses: gsactions/commit-message-checker@v2.0.0
         with:
           pattern: ^(?:Merge branch \')|(?:(?:feat|fix|build|chore|ci|docs|style|refactor|perf|test)(?:\((?:\w|\s|\-|_)+\))?(?:!)?:\s\w+)
