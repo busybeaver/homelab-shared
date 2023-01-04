@@ -141,11 +141,11 @@ jobs:
           app_id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
           private_key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
 
-      - name: Check Line Length
+      - name: GitHub - Conventional Commit Messages
         uses: gsactions/commit-message-checker@v2.0.0
         with:
           pattern: ^(?:Merge branch \')|(?:(?:feat|fix|build|chore|ci|docs|style|refactor|perf|test)(?:\((?:\w|\s|\-|_)+\))?(?:!)?:\s\w+)
-          error: 'The commit title did not follow the conventional commits specification'
+          error: 'The commit message title did not follow the conventional commits specification'
           excludeDescription: 'true' # excludes the description body of a pull request
           excludeTitle: 'true' # excludes the title of a pull request
           checkAllCommitMessages: 'true' # check all commits associated with a pull request
