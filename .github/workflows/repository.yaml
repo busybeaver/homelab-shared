@@ -1,6 +1,16 @@
 name: "Repository CI"
 
 on:
+    # run on pushes to main
+  push:
+    branches:
+      - main
+      - gh-readonly-queue/main/**
+  # run on pull requests that target the main branch
+  pull_request:
+    branches:
+      - main
+  # run on pull request events
   pull_request_target:
     types:
       - opened
@@ -26,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # only auto-approve PRs that were opened by renovate or the snap-package updater (but do NOT auto approve major updates)
-    if: (github.actor == 'renovate[bot]' || github.actor == 'snap-package-updater[bot]') && !contains(github.event.pull_request.labels.*.name, 'major-update')
+    if: github.event_name == 'pull_request_target' && (github.actor == 'renovate[bot]' || github.actor == 'snap-package-updater[bot]') && !contains(github.event.pull_request.labels.*.name, 'major-update')
 
     defaults:
       run:
@@ -55,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # only auto-merge PRs that were opened by renovate or the snap-package updater
-    if: github.actor == 'renovate[bot]' || github.actor == 'snap-package-updater[bot]'
+    if: github.event_name == 'pull_request_target' && (github.actor == 'renovate[bot]' || github.actor == 'snap-package-updater[bot]')
 
     defaults:
       run:
@@ -85,6 +95,8 @@ jobs:
     name: 'Semantic Pull Request Title'
     runs-on: ubuntu-latest
 
+    if: github.event_name == 'pull_request_target'
+
     defaults:
       run:
         shell: bash
@@ -94,10 +106,6 @@ jobs:
       contents: read
 
     steps:
-      - name: test 123
-        run: |
-          echo ${{ github.event_name }}
-
       - name: GitHub - Generate App Token
         id: github_generate_app_token
         uses: tibdex/github-app-token@021a2405c7f990db57f5eae5397423dcc554159c # tag=v1.7.0
@@ -109,3 +117,35 @@ jobs:
         uses: amannn/action-semantic-pull-request@01d5fd8a8ebb9aafe902c40c53f0f4744f7381eb # v5.0.2
         env:
           GITHUB_TOKEN: ${{ steps.github_generate_app_token.outputs.token }}
+
+  conventional_commits:
+    name: 'Conventional Commits Verification'
+    runs-on: ubuntu-latest
+
+    if: github.event_name == 'pull_request_target'
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: '.'
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: GitHub - Generate App Token
+        id: github_generate_app_token
+        uses: tibdex/github-app-token@021a2405c7f990db57f5eae5397423dcc554159c # tag=v1.7.0
+        with:
+          app_id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
+          private_key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
+
+      - name: Check Line Length
+        uses: gsactions/commit-message-checker@v2.0.0
+        with:
+          pattern: ^(?:Merge branch \')|(?:(?:feat|fix|build|chore|ci|docs|style|refactor|perf|test)(?:\((?:\w|\s|\-|_)+\))?(?:!)?:\s\w+)
+          error: 'The commit title did not follow the conventional commits specification'
+          excludeDescription: 'true' # excludes the description body of a pull request
+          excludeTitle: 'true' # excludes the title of a pull request
+          checkAllCommitMessages: 'true' # check all commits associated with a pull request
+          accessToken: ${{ steps.github_generate_app_token.outputs.token }}
