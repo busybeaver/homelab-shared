@@ -95,6 +95,7 @@ jobs:
     name: 'Semantic Pull Request Title'
     runs-on: ubuntu-latest
 
+    # run on all pull requests
     if: github.event_name == 'pull_request_target'
 
     defaults:
@@ -122,7 +123,7 @@ jobs:
     name: 'Conventional Commits Verification'
     runs-on: ubuntu-latest
 
-    if: github.event_name == 'pull_request_target'
+    # run on all commits and pull requests
 
     defaults:
       run:
