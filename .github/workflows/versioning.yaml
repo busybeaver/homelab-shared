@@ -65,5 +65,5 @@ jobs:
       - name: Git - Tag Semantic Version
         id: git_tag_semantic_version
         run: |
-          git tag ${{ steps.git_determine_semantic_version.outputs.version_tag }}
-          git push origin ${{ steps.git_determine_semantic_version.outputs.version_tag }}
+          git tag "${{ steps.git_determine_semantic_version.outputs.version_tag }}"
+          git push origin "${{ steps.git_determine_semantic_version.outputs.version_tag }}"
