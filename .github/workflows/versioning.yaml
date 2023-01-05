@@ -39,8 +39,11 @@ jobs:
         with:
           # required by PaulHatch/semantic-version
           fetch-depth: 0
+          # this is the token (i.e. the user) that is used for git operations
+          token: ${{ secrets.GH_AUTOMATION_TOKEN }}
 
-      - name: Git - Tag Semantic Version
+      - name: Git - Determine Semantic Version
+        id: git_determine_semantic_version
         uses: PaulHatch/semantic-version@v5.0.2
         with:
           tag_prefix: "v"
@@ -49,3 +52,18 @@ jobs:
           bump_each_commit: true
           # so we can find potential 'BREAKING CHANGE' statements in the commit body
           search_commit_body: true
+
+      - name: GitHub - Setup GPG Keys
+        id: github_setup_gpg
+        uses: crazy-max/ghaction-import-gpg@111c56156bcc6918c056dbef52164cfa583dc549 # tag=v5.2.0
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          git_user_signingkey: true
+          git_tag_gpgsign: true
+
+      - name: Git - Tag Semantic Version
+        id: git_tag_semantic_version
+        run: |
+          git tag ${{ steps.git_determine_semantic_version.outputs.version_tag }}
+          git push origin ${{ steps.git_determine_semantic_version.outputs.version_tag }}
