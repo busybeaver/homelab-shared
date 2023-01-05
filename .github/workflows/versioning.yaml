@@ -41,7 +41,7 @@ jobs:
           fetch-depth: 0
 
       - name: Git - Tag Semantic Version
-        uses: PaulHatch/semantic-version@v5.0.2
+        uses: PaulHatch/semantic-version@ea50fff3e41d24bb283f22b7343c4b3a314282fb # v5.0.2
         with:
           tag_prefix: "v"
           major_pattern: (?:^\w+(?:\((?:\w|\s|\-|_)+\))?!:\s\w+)|(?:BREAKING CHANGE:)
