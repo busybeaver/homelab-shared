@@ -65,10 +65,11 @@ jobs:
       - name: Git - Tag Semantic Version
         id: git_tag_semantic_version
         run: |
+          set -euo pipefail
+          IFS=$'\n\t'
+          set -x
+
           export GIT_TERMINAL_PROMPT=0
-          echo "1"
           git --no-pager config --list --show-scope --show-origin
           git tag "${{ steps.git_determine_semantic_version.outputs.version_tag }}"
-          echo "2"
           git push origin "${{ steps.git_determine_semantic_version.outputs.version_tag }}"
-          echo "3"
