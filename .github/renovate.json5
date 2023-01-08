@@ -36,6 +36,12 @@
       "assignees": ["busybeaver"],
       "reviewers": ["busybeaver"],
       "addLabels": ["major-update"],
+    },
+    {
+      "groupName": "shared-workflows",
+      "matchPackagePatterns": [
+        "^busybeaver/homelab-shared.*"
+      ]
     }
   ],
 }
