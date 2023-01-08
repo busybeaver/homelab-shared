@@ -62,15 +62,12 @@ jobs:
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
           git_user_signingkey: true
           git_tag_gpgsign: true
+          # currently not supported by github: https://github.com/orgs/community/discussions/23515
+          git_push_gpgsign: false
 
       - name: Git - Tag Semantic Version
         id: git_tag_semantic_version
         if: steps.git_determine_semantic_version.outputs.version_type != 'none'
         run: |
-          set -euo pipefail
-          IFS=$'\n\t'
-          set -x
-
-          git --no-pager config --list --show-scope --show-origin
-          git tag -a "${{ steps.git_determine_semantic_version.outputs.version_tag }}" -m "repo=${{ github.repository }}\nworkflow=${{ github.workflow }}\nref=${{ github.sha }}\version=${{ steps.git_determine_semantic_version.outputs.formatted_version }}"
+          git tag -a "${{ steps.git_determine_semantic_version.outputs.version_tag }}" -m "repo=\"${{ github.repository }}\"" -m "workflow=\"${{ github.workflow }}\"" -m "ref=\"${{ github.sha }}\""
           git push origin "${{ steps.git_determine_semantic_version.outputs.version_tag }}"
