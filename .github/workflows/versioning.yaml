@@ -56,6 +56,7 @@ jobs:
       - name: GitHub - Setup GPG Keys
         id: github_setup_gpg
         uses: crazy-max/ghaction-import-gpg@111c56156bcc6918c056dbef52164cfa583dc549 # tag=v5.2.0
+        if: steps.git_determine_semantic_version.outputs.version_type != 'none'
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
@@ -64,12 +65,12 @@ jobs:
 
       - name: Git - Tag Semantic Version
         id: git_tag_semantic_version
+        if: steps.git_determine_semantic_version.outputs.version_type != 'none'
         run: |
           set -euo pipefail
           IFS=$'\n\t'
           set -x
 
-          export GIT_TERMINAL_PROMPT=0
           git --no-pager config --list --show-scope --show-origin
-          git tag "${{ steps.git_determine_semantic_version.outputs.version_tag }}"
+          git tag -a "${{ steps.git_determine_semantic_version.outputs.version_tag }}" -m "repo=${{ github.repository }}\nworkflow=${{ github.workflow }}\nref=${{ github.sha }}\version=${{ steps.git_determine_semantic_version.outputs.formatted_version }}"
           git push origin "${{ steps.git_determine_semantic_version.outputs.version_tag }}"
