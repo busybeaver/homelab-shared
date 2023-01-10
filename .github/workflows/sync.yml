@@ -39,7 +39,7 @@ jobs:
 
       - name: GitHub - Sync Repository Configuration
         id: github_sync_repo_config
-        uses: BetaHuhn/repo-file-sync-action@475a6502288f55cc52e951bdd1c44d7981218478 # v1.19.0
+        uses: BetaHuhn/repo-file-sync-action@69868d68f6969b7a599ca783823eb29e3b3679e8 # v1.20.0
         with:
           GH_INSTALLATION_TOKEN: ${{ steps.github_generate_app_token.outputs.token }}
           PR_LABELS: configuration
