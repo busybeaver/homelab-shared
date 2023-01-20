@@ -78,7 +78,7 @@ jobs:
 
       - name: SuperLinter - Lint Files
         id: superlinter_scan_with_ts
-        uses: github/super-linter/slim@985ef206aaca4d560cb9ee2af2b42ba44adc1d55 # v4.10.0
+        uses: github/super-linter/slim@454ba4482ce2cd0c505bc592e83c06e1e37ade61 # v4.10.1
         if: inputs.lintTypescript == true
         env:
           # the VALIDATE_* env variables cannot be mixed with true and false (so we cannot set it conditionally;
@@ -87,7 +87,7 @@ jobs:
 
       - name: SuperLinter - Lint Files
         id: superlinter_scan_without_ts
-        uses: github/super-linter/slim@985ef206aaca4d560cb9ee2af2b42ba44adc1d55 # v4.10.0
+        uses: github/super-linter/slim@454ba4482ce2cd0c505bc592e83c06e1e37ade61 # v4.10.1
         if: inputs.lintTypescript != true
 
   git_secrets:
