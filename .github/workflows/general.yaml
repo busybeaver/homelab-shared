@@ -113,7 +113,7 @@ jobs:
 
       # TODO: due to this issue: https://github.com/actions/checkout/issues/1169
       - name: Git - Post Checkout
-        id: cosign_verify
+        id: git_post_checkout
         run: |
           git config --system --add safe.directory $(pwd)
 
