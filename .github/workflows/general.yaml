@@ -111,11 +111,11 @@ jobs:
           # Checkout full git history; required by GitGuardian
           fetch-depth: 0
 
-      # TODO: due to this issue: https://github.com/actions/checkout/issues/1169
+      # TODO: workaround for issue: https://github.com/actions/checkout/issues/1169
       - name: Git - Post Checkout
         id: git_post_checkout
         run: |
-          git config --system --add safe.directory $(pwd)
+          sudo git config --system --add safe.directory $(pwd)
 
       - name: GitGuardian - Scan For Commited Secrets
         id: gitguardian_scan
