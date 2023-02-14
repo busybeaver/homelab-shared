@@ -115,7 +115,7 @@ jobs:
       - name: Git - Post Checkout
         id: git_post_checkout
         run: |
-          sudo git config --system --add safe.directory $(pwd)
+          sudo git config --system --add safe.directory "$(pwd)"
           git --no-pager config --list --show-origin
 
       - name: GitGuardian - Scan For Commited Secrets
