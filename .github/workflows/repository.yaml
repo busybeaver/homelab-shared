@@ -85,7 +85,7 @@ jobs:
 
       - name: GitHub - Enable PR Auto Merge
         id: github_enable_pr_auto_merge
-        uses: peter-evans/enable-pull-request-automerge@60812ab1c2c6c6a8932b4d6e059becafaf386256 # v2.3.0
+        uses: peter-evans/enable-pull-request-automerge@51b7924f8e9b3bb022e2bb6f30e478e199bfca43 # v2.4.0
         with:
           token: ${{ steps.github_generate_app_token.outputs.token }}
           pull-request-number: ${{ github.event.pull_request.number }}
