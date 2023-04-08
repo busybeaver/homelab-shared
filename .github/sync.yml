@@ -2,6 +2,7 @@ group:
   repos: |
     busybeaver/homelab-iac
     busybeaver/homelab-packages
+    busybeaver/homelab-services
   files:
     - .github/linters/
     - .github/act_event.json
