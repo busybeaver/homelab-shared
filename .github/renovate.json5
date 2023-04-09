@@ -10,6 +10,7 @@
     ":enableVulnerabilityAlerts",
     ":disableDependencyDashboard",
     "helpers:pinGitHubActionDigests",
+    "regexManagers:githubActionsVersions"
   ],
   "labels": ["dependencies"],
   "rollbackPrs": true,
