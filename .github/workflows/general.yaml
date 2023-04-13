@@ -152,5 +152,5 @@ jobs:
       - name: Cosign - Verify Public Key
         id: cosign_verify
         run: |
-          cosign verify-blob --key cosign.pub --signature "$(cat cosign.pub.sig)" cosign.pub
+          cosign verify-blob --key cosign.pub --signature cosign.pub.sig cosign.pub
         working-directory: ./public_key/
