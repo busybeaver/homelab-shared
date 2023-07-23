@@ -71,14 +71,14 @@ jobs:
     steps:
       - name: Git - Checkout
         id: git_checkout
-        uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
         with:
           # Checkout full git history; required by git-leaks
           fetch-depth: 0
 
       - name: SuperLinter - Lint Files
         id: superlinter_scan_with_ts
-        uses: github/super-linter/slim@454ba4482ce2cd0c505bc592e83c06e1e37ade61 # v4.10.1
+        uses: github/super-linter/slim@45fc0d88288beee4701c62761281edfee85655d7 # v5.0.0
         if: inputs.lintTypescript == true
         env:
           # the VALIDATE_* env variables cannot be mixed with true and false (so we cannot set it conditionally;
@@ -87,7 +87,7 @@ jobs:
 
       - name: SuperLinter - Lint Files
         id: superlinter_scan_without_ts
-        uses: github/super-linter/slim@454ba4482ce2cd0c505bc592e83c06e1e37ade61 # v4.10.1
+        uses: github/super-linter/slim@45fc0d88288beee4701c62761281edfee85655d7 # v5.0.0
         if: inputs.lintTypescript != true
 
   git_secrets:
@@ -106,14 +106,14 @@ jobs:
     steps:
       - name: Git - Checkout
         id: git_checkout
-        uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
         with:
           # Checkout full git history; required by GitGuardian
           fetch-depth: 0
 
       - name: GitGuardian - Scan For Commited Secrets
         id: gitguardian_scan
-        uses: GitGuardian/ggshield-action@457dacf2e8238d9443115a4a56bafcd3f99afbed # v1.14.5
+        uses: GitGuardian/ggshield-action@20ec876d80e4e4efc86c8c6b19ecad17e34fabbf # v1.17.2
         continue-on-error: true # TODO: workaround for issue: https://github.com/actions/checkout/issues/1169
         env:
           GITHUB_PUSH_BEFORE_SHA: ${{ github.event.before }}
@@ -136,16 +136,16 @@ jobs:
 
     env:
       # renovate: datasource=github-releases depName=sigstore/cosign
-      COSIGN_VERSION: v2.0.1
+      COSIGN_VERSION: v2.1.1
 
     steps:
       - name: Git - Checkout
         id: git_checkout
-        uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
 
       - name: Cosign - Setup
         id: cosign_setup
-        uses: sigstore/cosign-installer@9e9de2292db7abb3f51b7f4808d98f0d347a8919 # v3.0.2
+        uses: sigstore/cosign-installer@6e04d228eb30da1757ee4e1dd75a0ec73a653e06 # v3.1.1
         with:
           cosign-release: ${{ env.COSIGN_VERSION }}
 
