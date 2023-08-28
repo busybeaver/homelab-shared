@@ -44,7 +44,7 @@ jobs:
 
       - name: Git - Determine Semantic Version
         id: git_determine_semantic_version
-        uses: PaulHatch/semantic-version@d93d2fb8878daa052e74298ed8b131c25f5ee7d6 # v5.2.0
+        uses: PaulHatch/semantic-version@5f6f89c4e06f9e1a2df00821598c0ac1f9085094 # v5.2.1
         with:
           tag_prefix: "v"
           major_pattern: (?:^\w+(?:\((?:\w|\s|\-|_)+\))?!:\s\w+)|(?:BREAKING CHANGE:)
