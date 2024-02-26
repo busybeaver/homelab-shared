@@ -35,7 +35,7 @@ jobs:
     steps:
       - name: Git - Checkout
         id: git_checkout
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           # required by PaulHatch/semantic-version
           fetch-depth: 0
@@ -44,7 +44,7 @@ jobs:
 
       - name: Git - Determine Semantic Version
         id: git_determine_semantic_version
-        uses: PaulHatch/semantic-version@61243c92212f7939f340bd2f8072bee529ac77df # v5.0.3
+        uses: PaulHatch/semantic-version@a8f8f59fd7f0625188492e945240f12d7ad2dca3 # v5.4.0
         with:
           tag_prefix: "v"
           major_pattern: (?:^\w+(?:\((?:\w|\s|\-|_)+\))?!:\s\w+)|(?:BREAKING CHANGE:)
@@ -55,7 +55,7 @@ jobs:
 
       - name: GitHub - Setup GPG Keys
         id: github_setup_gpg
-        uses: crazy-max/ghaction-import-gpg@72b6676b71ab476b77e676928516f6982eef7a41 # v5.3.0
+        uses: crazy-max/ghaction-import-gpg@01dd5d3ca463c7f10f7f4f7b4f177225ac661ee4 # v6.1.0
         if: steps.git_determine_semantic_version.outputs.version_type != 'none'
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
