@@ -33,7 +33,7 @@ jobs:
 
     env:
       # renovate: datasource=github-releases depName=sigstore/cosign
-      COSIGN_VERSION: v2.2.3
+      COSIGN_VERSION: v2.2.4
       REGISTRY: ghcr.io # GitHub Registry
 
     steps:
