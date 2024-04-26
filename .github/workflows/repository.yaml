@@ -116,7 +116,7 @@ jobs:
 
       - name: GitHub - Semantic Pull Request
         id: github_semantic_pull_request
-        uses: amannn/action-semantic-pull-request@e9fabac35e210fea40ca5b14c0da95a099eff26f # v5.4.0
+        uses: amannn/action-semantic-pull-request@c24d6dd07c69e0826c52021944f216b2e3192535 # v5.5.0
         env:
           GITHUB_TOKEN: ${{ steps.github_generate_app_token.outputs.token }}
 
