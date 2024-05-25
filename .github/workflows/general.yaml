@@ -24,6 +24,10 @@ on:
         description: 'Flag to enable or disable the linting process of the TypeScript language. (Utilizing: eslint)'
         type: boolean
         default: false
+      lintDocker:
+        description: 'Flag to enable or disable the linting process of the Docker language. (Utilizing: hadolint)'
+        type: boolean
+        default: false
     secrets:
       # necessary permissions: 'contents: read', 'statuses: write'
       # GITHUB_TOKEN:
@@ -84,18 +88,37 @@ jobs:
           fetch-depth: 0
 
       - name: SuperLinter - Lint Files
+        id: superlinter_scan_with_ts_and_docker
+        uses: github/super-linter/slim@45fc0d88288beee4701c62761281edfee85655d7 # v5.0.0
+        if: inputs.lintTypescript == true && inputs.lintDocker == true
+        env:
+          # the VALIDATE_* env variables cannot be mixed with true and false (so we cannot set it conditionally;
+          # as an alternative, we run the same github action but with different if statements
+          VALIDATE_DOCKERFILE_HADOLINT: true
+          VALIDATE_TYPESCRIPT_ES: true
+
+      - name: SuperLinter - Lint Files
         id: superlinter_scan_with_ts
         uses: github/super-linter/slim@45fc0d88288beee4701c62761281edfee85655d7 # v5.0.0
-        if: inputs.lintTypescript == true
+        if: inputs.lintTypescript == true && inputs.lintDocker == false
         env:
           # the VALIDATE_* env variables cannot be mixed with true and false (so we cannot set it conditionally;
           # as an alternative, we run the same github action but with different if statements
           VALIDATE_TYPESCRIPT_ES: true
 
       - name: SuperLinter - Lint Files
+        id: superlinter_scan_with_ts_and_docker
+        uses: github/super-linter/slim@45fc0d88288beee4701c62761281edfee85655d7 # v5.0.0
+        if: inputs.lintTypescript != true && inputs.lintDocker == true
+        env:
+          # the VALIDATE_* env variables cannot be mixed with true and false (so we cannot set it conditionally;
+          # as an alternative, we run the same github action but with different if statements
+          VALIDATE_DOCKERFILE_HADOLINT: true
+
+      - name: SuperLinter - Lint Files
         id: superlinter_scan_without_ts
         uses: github/super-linter/slim@45fc0d88288beee4701c62761281edfee85655d7 # v5.0.0
-        if: inputs.lintTypescript != true
+        if: inputs.lintTypescript != true && inputs.lintDocker != true
 
   git_secrets:
     name: 'Git Secret Exposure Checks'
