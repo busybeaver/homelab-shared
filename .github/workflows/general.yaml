@@ -107,7 +107,7 @@ jobs:
           VALIDATE_TYPESCRIPT_ES: true
 
       - name: SuperLinter - Lint Files
-        id: superlinter_scan_with_ts_and_docker
+        id: superlinter_scan_with_docker
         uses: github/super-linter/slim@45fc0d88288beee4701c62761281edfee85655d7 # v5.0.0
         if: inputs.lintTypescript != true && inputs.lintDocker == true
         env:
