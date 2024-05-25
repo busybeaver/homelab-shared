@@ -37,6 +37,11 @@ jobs:
       REGISTRY: ghcr.io # GitHub Registry
 
     steps:
+      - name: StepSecurity - Harden Github-hosted Runners
+        uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142 # v2.7.0
+        with:
+          egress-policy: audit
+          
       - name: TESTING
         id: cosign_sign
         run: |
