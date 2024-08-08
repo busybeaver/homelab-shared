@@ -150,7 +150,7 @@ jobs:
 
       - name: GitGuardian - Scan For Commited Secrets
         id: gitguardian_scan
-        uses: GitGuardian/ggshield-action@e281794b3f64c7c081c54510ab43914927327cf7 # v1.30.1
+        uses: GitGuardian/ggshield-action@301d924983d28713330391607e96c389e2262849 # v1.30.2
         continue-on-error: true # TODO: workaround for issue: https://github.com/actions/checkout/issues/1169
         env:
           GITHUB_PUSH_BEFORE_SHA: ${{ github.event.before }}
