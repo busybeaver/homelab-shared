@@ -173,7 +173,7 @@ jobs:
 
     env:
       # renovate: datasource=github-releases depName=sigstore/cosign
-      COSIGN_VERSION: v3.0.2
+      COSIGN_VERSION: v3.0.3
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
