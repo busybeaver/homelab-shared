@@ -13,10 +13,25 @@ on:
   # run weekly on Monday at 12:00
   schedule:
     - cron: '0 12 * * 1'
+  # allows to run the workflow manually
+  workflow_dispatch:
+    inputs:
+      filterRegexExclude:
+        description: 'Regular expression defining which files will be excluded from linting'
+        type: string
+        default: none
+      lintTypescript:
+        description: 'Flag to enable or disable the linting process of the TypeScript language. (Utilizing: eslint)'
+        type: boolean
+        default: false
+      lintDocker:
+        description: 'Flag to enable or disable the linting process of the Docker language. (Utilizing: hadolint)'
+        type: boolean
+        default: false
   # allows to reuse the workflow in other repositories
   workflow_call:
     inputs:
-      filterRegexExlude:
+      filterRegexExclude:
         description: 'Regular expression defining which files will be excluded from linting'
         type: string
         default: none
@@ -45,6 +60,7 @@ jobs:
   code_quality:
     name: 'Code Quality Checks'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     defaults:
       run:
@@ -59,10 +75,11 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
       # https://github.com/actions/runner/issues/409#issuecomment-752775072
-      FILTER_REGEX_EXCLUDE: ${{ inputs.filterRegexExlude || 'none' }}
+      FILTER_REGEX_EXCLUDE: ${{ inputs.filterRegexExclude || 'none' }}
       TYPESCRIPT_DEFAULT_STYLE: prettier
       VALIDATE_ALL_CODEBASE: ${{ github.event_name != 'pull_request' }}
       VALIDATE_BASH: true
+      VALIDATE_DOCKERFILE_HADOLINT: ${{ inputs.lintDocker || false }}
       VALIDATE_EDITORCONFIG: true
       VALIDATE_GITHUB_ACTIONS: true
       VALIDATE_GITLEAKS: true
@@ -70,6 +87,7 @@ jobs:
       VALIDATE_MARKDOWN: true
       VALIDATE_NATURAL_LANGUAGE: true
       VALIDATE_SHELL_SHFMT: true
+      VALIDATE_TYPESCRIPT_ES: ${{ inputs.lintTypescript || false }}
       VALIDATE_YAML: true
 
     steps:
@@ -88,41 +106,13 @@ jobs:
           fetch-depth: 0
 
       - name: SuperLinter - Lint Files
-        id: superlinter_scan_with_ts_and_docker
+        id: superlinter_scan
         uses: github/super-linter/slim@45fc0d88288beee4701c62761281edfee85655d7 # v5.0.0
-        if: inputs.lintTypescript == true && inputs.lintDocker == true
-        env:
-          # the VALIDATE_* env variables cannot be mixed with true and false (so we cannot set it conditionally;
-          # as an alternative, we run the same github action but with different if statements
-          VALIDATE_DOCKERFILE_HADOLINT: true
-          VALIDATE_TYPESCRIPT_ES: true
-
-      - name: SuperLinter - Lint Files
-        id: superlinter_scan_with_ts
-        uses: github/super-linter/slim@45fc0d88288beee4701c62761281edfee85655d7 # v5.0.0
-        if: inputs.lintTypescript == true && inputs.lintDocker == false
-        env:
-          # the VALIDATE_* env variables cannot be mixed with true and false (so we cannot set it conditionally;
-          # as an alternative, we run the same github action but with different if statements
-          VALIDATE_TYPESCRIPT_ES: true
-
-      - name: SuperLinter - Lint Files
-        id: superlinter_scan_with_docker
-        uses: github/super-linter/slim@45fc0d88288beee4701c62761281edfee85655d7 # v5.0.0
-        if: inputs.lintTypescript != true && inputs.lintDocker == true
-        env:
-          # the VALIDATE_* env variables cannot be mixed with true and false (so we cannot set it conditionally;
-          # as an alternative, we run the same github action but with different if statements
-          VALIDATE_DOCKERFILE_HADOLINT: true
-
-      - name: SuperLinter - Lint Files
-        id: superlinter_scan_without_ts
-        uses: github/super-linter/slim@45fc0d88288beee4701c62761281edfee85655d7 # v5.0.0
-        if: inputs.lintTypescript != true && inputs.lintDocker != true
 
   git_secrets:
     name: 'Git Secret Exposure Checks'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     defaults:
       run:
@@ -153,15 +143,12 @@ jobs:
         uses: GitGuardian/ggshield-action@8b29edc57b582045b12d45c8cc8f8040e121693b # v1.46.0
         continue-on-error: true # TODO: workaround for issue: https://github.com/actions/checkout/issues/1169
         env:
-          GITHUB_PUSH_BEFORE_SHA: ${{ github.event.before }}
-          GITHUB_PUSH_BASE_SHA: ${{ github.event.base }}
-          GITHUB_PULL_BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          GITHUB_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
           GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
 
   public_key_verification:
     name: 'Public Key Verification'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     defaults:
       run:

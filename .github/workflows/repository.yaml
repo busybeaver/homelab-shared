@@ -20,6 +20,8 @@ on:
       # - review_requested
     branches:
       - main
+  # allows to run the workflow manually
+  workflow_dispatch:
   # allows to reuse the workflow in other repositories
   workflow_call:
     secrets:
@@ -34,6 +36,7 @@ jobs:
   pr_auto_approve:
     name: 'Auto Approve PR'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     # only auto-approve PRs that were opened by renovate or the snap-package updater (but do NOT auto approve major updates)
     if: github.event_name == 'pull_request_target' && (github.actor == 'renovate[bot]' || github.actor == 'snap-package-updater[bot]') && !contains(github.event.pull_request.labels.*.name, 'major-update')
@@ -56,10 +59,10 @@ jobs:
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
-        uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2.1.0
+        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
         with:
-          app_id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
-          private_key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
+          app-id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
+          private-key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
 
       - name: GitHub - Auto Approve Pull Request
         id: github_auto_approve_pr
@@ -70,6 +73,7 @@ jobs:
   pr_auto_merge:
     name: 'Enable Auto Merge PR'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     # only auto-merge PRs that were opened by renovate or the snap-package updater
     if: github.event_name == 'pull_request_target' && (github.actor == 'renovate[bot]' || github.actor == 'snap-package-updater[bot]')
@@ -92,10 +96,10 @@ jobs:
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
-        uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2.1.0
+        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
         with:
-          app_id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
-          private_key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
+          app-id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
+          private-key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
 
       - name: GitHub - Enable PR Auto Merge
         id: github_enable_pr_auto_merge
@@ -108,6 +112,7 @@ jobs:
   semantic_pull_request:
     name: 'Semantic Pull Request Title'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     # run on all pull requests
     if: github.event_name == 'pull_request_target'
@@ -130,10 +135,10 @@ jobs:
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
-        uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2.1.0
+        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
         with:
-          app_id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
-          private_key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
+          app-id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
+          private-key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
 
       - name: GitHub - Semantic Pull Request
         id: github_semantic_pull_request
@@ -144,6 +149,7 @@ jobs:
   conventional_commits:
     name: 'Conventional Commits Verification'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     # run on all commits and pull requests
 
@@ -165,10 +171,10 @@ jobs:
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
-        uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2.1.0
+        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
         with:
-          app_id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
-          private_key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
+          app-id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
+          private-key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
 
       - name: GitHub - Conventional Commit Messages
         id: github_conventional_commit_messages
