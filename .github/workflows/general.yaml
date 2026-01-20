@@ -1,6 +1,6 @@
 name: 'General CI'
 
-on:
+"on":
   # run on pushes to main
   push:
     branches:
@@ -16,7 +16,7 @@ on:
   # allows to reuse the workflow in other repositories
   workflow_call:
     inputs:
-      filterRegexExlude:
+      filterRegexExclude:
         description: 'Regular expression defining which files will be excluded from linting'
         type: string
         default: none
@@ -45,6 +45,7 @@ jobs:
   code_quality:
     name: 'Code Quality Checks'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     defaults:
       run:
@@ -59,7 +60,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
       # https://github.com/actions/runner/issues/409#issuecomment-752775072
-      FILTER_REGEX_EXCLUDE: ${{ inputs.filterRegexExlude || 'none' }}
+      FILTER_REGEX_EXCLUDE: ${{ inputs.filterRegexExclude || 'none' }}
       TYPESCRIPT_DEFAULT_STYLE: prettier
       VALIDATE_ALL_CODEBASE: ${{ github.event_name != 'pull_request' }}
       VALIDATE_BASH: true
@@ -82,47 +83,32 @@ jobs:
 
       - name: Git - Checkout
         id: git_checkout
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
         with:
           # Checkout full git history; required by git-leaks
           fetch-depth: 0
 
-      - name: SuperLinter - Lint Files
-        id: superlinter_scan_with_ts_and_docker
-        uses: github/super-linter/slim@45fc0d88288beee4701c62761281edfee85655d7 # v5.0.0
-        if: inputs.lintTypescript == true && inputs.lintDocker == true
-        env:
-          # the VALIDATE_* env variables cannot be mixed with true and false (so we cannot set it conditionally;
-          # as an alternative, we run the same github action but with different if statements
-          VALIDATE_DOCKERFILE_HADOLINT: true
-          VALIDATE_TYPESCRIPT_ES: true
+      - name: SuperLinter - Set Dynamic Environment
+        id: superlinter_env
+        run: |
+          # We only set the variables to 'true' if the input is true.
+          # We avoid setting them to 'false' because SuperLinter does not allow
+          # mixing 'true' and 'false' for VALIDATE_* variables.
+          if [ "${{ inputs.lintDocker }}" = "true" ]; then
+            echo "VALIDATE_DOCKERFILE_HADOLINT=true" >> "$GITHUB_ENV"
+          fi
+          if [ "${{ inputs.lintTypescript }}" = "true" ]; then
+            echo "VALIDATE_TYPESCRIPT_ES=true" >> "$GITHUB_ENV"
+          fi
 
       - name: SuperLinter - Lint Files
-        id: superlinter_scan_with_ts
-        uses: github/super-linter/slim@45fc0d88288beee4701c62761281edfee85655d7 # v5.0.0
-        if: inputs.lintTypescript == true && inputs.lintDocker == false
-        env:
-          # the VALIDATE_* env variables cannot be mixed with true and false (so we cannot set it conditionally;
-          # as an alternative, we run the same github action but with different if statements
-          VALIDATE_TYPESCRIPT_ES: true
-
-      - name: SuperLinter - Lint Files
-        id: superlinter_scan_with_docker
-        uses: github/super-linter/slim@45fc0d88288beee4701c62761281edfee85655d7 # v5.0.0
-        if: inputs.lintTypescript != true && inputs.lintDocker == true
-        env:
-          # the VALIDATE_* env variables cannot be mixed with true and false (so we cannot set it conditionally;
-          # as an alternative, we run the same github action but with different if statements
-          VALIDATE_DOCKERFILE_HADOLINT: true
-
-      - name: SuperLinter - Lint Files
-        id: superlinter_scan_without_ts
-        uses: github/super-linter/slim@45fc0d88288beee4701c62761281edfee85655d7 # v5.0.0
-        if: inputs.lintTypescript != true && inputs.lintDocker != true
+        id: superlinter_scan
+        uses: github/super-linter/slim@45fc0d88288beee4701c62761281edfee85655d7  # v5.0.0
 
   git_secrets:
     name: 'Git Secret Exposure Checks'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     defaults:
       run:
@@ -150,18 +136,15 @@ jobs:
 
       - name: GitGuardian - Scan For Commited Secrets
         id: gitguardian_scan
-        uses: GitGuardian/ggshield-action@8b29edc57b582045b12d45c8cc8f8040e121693b # v1.46.0
-        continue-on-error: true # TODO: workaround for issue: https://github.com/actions/checkout/issues/1169
+        uses: GitGuardian/ggshield-action@8b29edc57b582045b12d45c8cc8f8040e121693b  # v1.46.0
+        continue-on-error: true  # TODO: workaround for issue: https://github.com/actions/checkout/issues/1169
         env:
-          GITHUB_PUSH_BEFORE_SHA: ${{ github.event.before }}
-          GITHUB_PUSH_BASE_SHA: ${{ github.event.base }}
-          GITHUB_PULL_BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          GITHUB_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
           GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
 
   public_key_verification:
     name: 'Public Key Verification'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     defaults:
       run:

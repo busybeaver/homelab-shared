@@ -1,6 +1,6 @@
 name: 'Versioning CI'
 
-on:
+"on":
   # best case would be when the 'General CI' AND the 'Repsitory CI' are completed, however, that's not possible so far:
   # https://stackoverflow.com/a/67721490
   # https://github.com/community/community/discussions/16059
@@ -18,6 +18,7 @@ jobs:
   semantic_versioning:
     name: 'Semantic Versioning'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     # only run if:
     # - the triggering workflows (the workflows that triggered this github action) completed/finished with success
@@ -34,7 +35,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
+        uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76  # v2.14.0
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -42,7 +43,7 @@ jobs:
 
       - name: Git - Checkout
         id: git_checkout
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
         with:
           # required by PaulHatch/semantic-version
           fetch-depth: 0
@@ -51,7 +52,7 @@ jobs:
 
       - name: Git - Determine Semantic Version
         id: git_determine_semantic_version
-        uses: PaulHatch/semantic-version@a8f8f59fd7f0625188492e945240f12d7ad2dca3 # v5.4.0
+        uses: PaulHatch/semantic-version@a8f8f59fd7f0625188492e945240f12d7ad2dca3  # v5.4.0
         with:
           tag_prefix: "v"
           major_pattern: (?:^\w+(?:\((?:\w|\s|\-|_)+\))?!:\s\w+)|(?:BREAKING CHANGE:)
@@ -62,7 +63,7 @@ jobs:
 
       - name: GitHub - Setup GPG Keys
         id: github_setup_gpg
-        uses: crazy-max/ghaction-import-gpg@e89d40939c28e39f97cf32126055eeae86ba74ec # v6.3.0
+        uses: crazy-max/ghaction-import-gpg@e89d40939c28e39f97cf32126055eeae86ba74ec  # v6.3.0
         if: steps.git_determine_semantic_version.outputs.version_type != 'none'
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}

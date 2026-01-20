@@ -1,7 +1,7 @@
 name: "Repository CI"
 
-on:
-    # run on pushes to main
+"on":
+  # run on pushes to main
   push:
     branches:
       - main
@@ -34,8 +34,10 @@ jobs:
   pr_auto_approve:
     name: 'Auto Approve PR'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
-    # only auto-approve PRs that were opened by renovate or the snap-package updater (but do NOT auto approve major updates)
+    # only auto-approve PRs that were opened by renovate or the snap-package updater
+    # (but do NOT auto approve major updates)
     if: github.event_name == 'pull_request_target' && (github.actor == 'renovate[bot]' || github.actor == 'snap-package-updater[bot]') && !contains(github.event.pull_request.labels.*.name, 'major-update')
 
     defaults:
@@ -48,7 +50,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
+        uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76  # v2.14.0
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -56,20 +58,21 @@ jobs:
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
-        uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2.1.0
+        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf  # v2.2.1
         with:
-          app_id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
-          private_key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
+          app-id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
+          private-key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
 
       - name: GitHub - Auto Approve Pull Request
         id: github_auto_approve_pr
-        uses: hmarr/auto-approve-action@f0939ea97e9205ef24d872e76833fa908a770363 # v4.0.0
+        uses: hmarr/auto-approve-action@f0939ea97e9205ef24d872e76833fa908a770363  # v4.0.0
         with:
           github-token: ${{ steps.github_generate_app_token.outputs.token }}
 
   pr_auto_merge:
     name: 'Enable Auto Merge PR'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     # only auto-merge PRs that were opened by renovate or the snap-package updater
     if: github.event_name == 'pull_request_target' && (github.actor == 'renovate[bot]' || github.actor == 'snap-package-updater[bot]')
@@ -84,7 +87,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
+        uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76  # v2.14.0
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -92,14 +95,14 @@ jobs:
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
-        uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2.1.0
+        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf  # v2.2.1
         with:
-          app_id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
-          private_key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
+          app-id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
+          private-key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
 
       - name: GitHub - Enable PR Auto Merge
         id: github_enable_pr_auto_merge
-        uses: peter-evans/enable-pull-request-automerge@a660677d5469627102a1c1e11409dd063606628d # v3.0.0
+        uses: peter-evans/enable-pull-request-automerge@a660677d5469627102a1c1e11409dd063606628d  # v3.0.0
         with:
           token: ${{ steps.github_generate_app_token.outputs.token }}
           pull-request-number: ${{ github.event.pull_request.number }}
@@ -108,6 +111,7 @@ jobs:
   semantic_pull_request:
     name: 'Semantic Pull Request Title'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     # run on all pull requests
     if: github.event_name == 'pull_request_target'
@@ -122,7 +126,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
+        uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76  # v2.14.0
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -130,20 +134,21 @@ jobs:
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
-        uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2.1.0
+        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf  # v2.2.1
         with:
-          app_id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
-          private_key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
+          app-id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
+          private-key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
 
       - name: GitHub - Semantic Pull Request
         id: github_semantic_pull_request
-        uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50 # v6.1.1
+        uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50  # v6.1.1
         env:
           GITHUB_TOKEN: ${{ steps.github_generate_app_token.outputs.token }}
 
   conventional_commits:
     name: 'Conventional Commits Verification'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     # run on all commits and pull requests
 
@@ -157,7 +162,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
+        uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76  # v2.14.0
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -165,14 +170,14 @@ jobs:
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
-        uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2.1.0
+        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf  # v2.2.1
         with:
-          app_id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
-          private_key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
+          app-id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
+          private-key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
 
       - name: GitHub - Conventional Commit Messages
         id: github_conventional_commit_messages
-        uses: gsactions/commit-message-checker@16fa2d5de096ae0d35626443bcd24f1e756cafee # v2.0.0
+        uses: gsactions/commit-message-checker@16fa2d5de096ae0d35626443bcd24f1e756cafee  # v2.0.0
         with:
           pattern: ^(?:Merge branch \')|(?:(?:feat|fix|build|chore|ci|docs|style|refactor|perf|test)(?:\((?:\w|\s|\-|_)+\))?(?:!)?:\s\w+)
           error: 'The commit message title did not follow the conventional commits specification'
