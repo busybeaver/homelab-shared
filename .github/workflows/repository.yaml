@@ -30,6 +30,10 @@ name: "Repository CI"
         description: The private key of the repository assistant GitHub app
         required: true
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   pr_auto_approve:
     name: 'Auto Approve PR'
@@ -150,7 +154,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
-    # run on all commits and pull requests
+    # run on all commits and pull requests (using pull_request_target for PRs)
+    if: github.event_name != 'pull_request'
 
     defaults:
       run:
