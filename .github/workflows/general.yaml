@@ -13,21 +13,6 @@ on:
   # run weekly on Monday at 12:00
   schedule:
     - cron: '0 12 * * 1'
-  # allows to run the workflow manually
-  workflow_dispatch:
-    inputs:
-      filterRegexExclude:
-        description: 'Regular expression defining which files will be excluded from linting'
-        type: string
-        default: none
-      lintTypescript:
-        description: 'Flag to enable or disable the linting process of the TypeScript language. (Utilizing: eslint)'
-        type: boolean
-        default: false
-      lintDocker:
-        description: 'Flag to enable or disable the linting process of the Docker language. (Utilizing: hadolint)'
-        type: boolean
-        default: false
   # allows to reuse the workflow in other repositories
   workflow_call:
     inputs:

@@ -20,8 +20,6 @@ on:
       # - review_requested
     branches:
       - main
-  # allows to run the workflow manually
-  workflow_dispatch:
   # allows to reuse the workflow in other repositories
   workflow_call:
     secrets:
