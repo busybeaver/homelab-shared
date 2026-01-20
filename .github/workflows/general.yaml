@@ -95,10 +95,10 @@ jobs:
           # We avoid setting them to 'false' because SuperLinter does not allow
           # mixing 'true' and 'false' for VALIDATE_* variables.
           if [ "${{ inputs.lintDocker }}" = "true" ]; then
-            echo "VALIDATE_DOCKERFILE_HADOLINT=true" >> $GITHUB_ENV
+            echo "VALIDATE_DOCKERFILE_HADOLINT=true" >> "$GITHUB_ENV"
           fi
           if [ "${{ inputs.lintTypescript }}" = "true" ]; then
-            echo "VALIDATE_TYPESCRIPT_ES=true" >> $GITHUB_ENV
+            echo "VALIDATE_TYPESCRIPT_ES=true" >> "$GITHUB_ENV"
           fi
 
       - name: SuperLinter - Lint Files
