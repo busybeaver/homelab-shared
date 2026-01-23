@@ -6,10 +6,6 @@ name: "Repository CI"
     branches:
       - main
       - gh-readonly-queue/main/**
-  # run on pull requests that target the main branch
-  pull_request:
-    branches:
-      - main
   # run on pull request events
   pull_request_target:
     types:
@@ -29,6 +25,12 @@ name: "Repository CI"
       REPOSITORY_ASSISTANT_PRIVATE_KEY:
         description: The private key of the repository assistant GitHub app
         required: true
+
+concurrency:
+  # on main, we want all builds to complete even if commits/merging happens faster to make it easier to discover at which point
+  # something broke; else, we cancel "old" builds and run/(re)start the build with the latest changes
+  group: ${{ github.ref == 'refs/heads/main' && format('ci-main-{0}-{1}', github.workflow, github.sha) || format('ci-{0}-{1}', github.workflow, github.event.pull_request.number || github.ref) }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   pr_auto_approve:
@@ -54,7 +56,7 @@ jobs:
         with:
           egress-policy: audit
           disable-telemetry: true
-          disable-sudo: true
+          disable-sudo-and-containers: true
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
@@ -91,7 +93,7 @@ jobs:
         with:
           egress-policy: audit
           disable-telemetry: true
-          disable-sudo: true
+          disable-sudo-and-containers: true
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
@@ -130,7 +132,7 @@ jobs:
         with:
           egress-policy: audit
           disable-telemetry: true
-          disable-sudo: true
+          disable-sudo-and-containers: true
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
@@ -150,7 +152,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
-    # run on all commits and pull requests
+    # only run on pushes to main or on pull request events
+    if: github.event_name == 'push' || github.event_name == 'pull_request_target'
 
     defaults:
       run:
@@ -166,7 +169,7 @@ jobs:
         with:
           egress-policy: audit
           disable-telemetry: true
-          disable-sudo: true
+          disable-sudo-and-containers: true
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
@@ -181,7 +184,7 @@ jobs:
         with:
           pattern: ^(?:Merge branch \')|(?:(?:feat|fix|build|chore|ci|docs|style|refactor|perf|test)(?:\((?:\w|\s|\-|_)+\))?(?:!)?:\s\w+)
           error: 'The commit message title did not follow the conventional commits specification'
-          excludeDescription: 'true' # excludes the description body of a pull request
-          excludeTitle: 'true' # excludes the title of a pull request
-          checkAllCommitMessages: 'true' # check all commits associated with a pull request
+          excludeDescription: 'true'  # excludes the description body of a pull request
+          excludeTitle: 'true'  # excludes the title of a pull request
+          checkAllCommitMessages: 'true'  # check all commits associated with a pull request
           accessToken: ${{ steps.github_generate_app_token.outputs.token }}
