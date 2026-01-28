@@ -10,9 +10,8 @@ name: 'Versioning CI'
       - completed
 
 concurrency:
-  # on main, we want all builds to complete even if commits/merging happens faster to make it easier to discover at which point
-  # something broke; else, we cancel "old" builds and run/(re)start the build with the latest changes
-  group: ${{ github.ref == 'refs/heads/main' && format('ci-main-{0}-{1}', github.workflow, github.sha) || format('ci-{0}-{1}', github.workflow, github.ref) }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   semantic_versioning:
@@ -35,11 +34,11 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76  # v2.14.0
+        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.14.1
         with:
           egress-policy: audit
           disable-telemetry: true
-          disable-sudo: true
+          disable-sudo-and-containers: true
 
       - name: Git - Checkout
         id: git_checkout
@@ -52,7 +51,7 @@ jobs:
 
       - name: Git - Determine Semantic Version
         id: git_determine_semantic_version
-        uses: PaulHatch/semantic-version@a8f8f59fd7f0625188492e945240f12d7ad2dca3  # v5.4.0
+        uses: PaulHatch/semantic-version@f29500c9d60a99ed5168e39ee367e0976884c46e  # v6.0.1
         with:
           tag_prefix: "v"
           major_pattern: (?:^\w+(?:\((?:\w|\s|\-|_)+\))?!:\s\w+)|(?:BREAKING CHANGE:)
