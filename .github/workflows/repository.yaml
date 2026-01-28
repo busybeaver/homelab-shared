@@ -30,6 +30,10 @@ name: "Repository CI"
         description: The private key of the repository assistant GitHub app
         required: true
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
 jobs:
   pr_auto_approve:
     name: 'Auto Approve PR'
@@ -181,7 +185,7 @@ jobs:
         with:
           pattern: ^(?:Merge branch \')|(?:(?:feat|fix|build|chore|ci|docs|style|refactor|perf|test)(?:\((?:\w|\s|\-|_)+\))?(?:!)?:\s\w+)
           error: 'The commit message title did not follow the conventional commits specification'
-          excludeDescription: 'true' # excludes the description body of a pull request
-          excludeTitle: 'true' # excludes the title of a pull request
-          checkAllCommitMessages: 'true' # check all commits associated with a pull request
+          excludeDescription: 'true'  # excludes the description body of a pull request
+          excludeTitle: 'true'  # excludes the title of a pull request
+          checkAllCommitMessages: 'true'  # check all commits associated with a pull request
           accessToken: ${{ steps.github_generate_app_token.outputs.token }}
