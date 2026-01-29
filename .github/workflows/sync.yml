@@ -12,6 +12,10 @@ name: "Sync CI"
   # run manually
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
 jobs:
   sync_config:
     name: 'Sync Repository Configuration'
@@ -32,7 +36,7 @@ jobs:
         with:
           egress-policy: audit
           disable-telemetry: true
-          disable-sudo: true
+          disable-sudo-and-containers: true
 
       - name: Git - Checkout
         id: git_checkout
