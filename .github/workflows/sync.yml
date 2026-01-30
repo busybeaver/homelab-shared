@@ -1,3 +1,4 @@
+---
 name: "Sync CI"
 
 "on":
@@ -13,7 +14,8 @@ name: "Sync CI"
   workflow_dispatch:
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: >-
+    ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:

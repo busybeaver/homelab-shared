@@ -1,3 +1,4 @@
+---
 name: 'General CI'
 
 "on":
@@ -36,11 +37,13 @@ name: 'General CI'
     secrets:
       # necessary permissions: 'contents: read', 'statuses: write'
       GITGUARDIAN_API_KEY:
-        description: API key used for authenticating against the GitGuardian APIs
+        description: >-
+          API key used for authenticating against the GitGuardian APIs
         required: true
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: >-
+    ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
@@ -76,15 +79,16 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.14.1
+        # v2.14.1
+        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9
         with:
           egress-policy: audit
           disable-telemetry: true
           disable-sudo: true
 
       - name: Git - Checkout
-        id: git_checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        # v6.0.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           # Checkout full git history; required by git-leaks
           fetch-depth: 0
@@ -104,7 +108,8 @@ jobs:
 
       - name: SuperLinter - Lint Files
         id: superlinter_scan
-        uses: super-linter/super-linter/slim@12562e48d7059cf666c43a4ecb0d3b5a2b31bd9e  # v8.4.0
+        # v8.4.0
+        uses: super-linter/super-linter/slim@12562e48d7059cf666c43a4ecb0d3b5a2b31bd9e
 
   git_secrets:
     name: 'Git Secret Exposure Checks'
@@ -122,22 +127,24 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.14.1
+        # v2.14.1
+        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9
         with:
           egress-policy: audit
           disable-telemetry: true
           disable-sudo: true
 
       - name: Git - Checkout
-        id: git_checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        # v6.0.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           # Checkout full git history; required by GitGuardian
           fetch-depth: 0
 
       - name: GitGuardian - Scan For Commited Secrets
         id: gitguardian_scan
-        uses: GitGuardian/ggshield-action@247ad4911092eee12989d379779c115632de6f84  # v1.47.0
+        # v1.47.0
+        uses: GitGuardian/ggshield-action@247ad4911092eee12989d379779c115632de6f84
         continue-on-error: true  # workaround for issue: actions/checkout#1169
         env:
           GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
@@ -161,19 +168,23 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.14.1
+        # v2.14.1
+        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9
         with:
           egress-policy: audit
           disable-telemetry: true
           disable-sudo-and-containers: true
 
       - name: Git - Checkout
-        id: git_checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        # v6.0.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          fetch-depth: 1
 
       - name: Cosign - Setup
         id: cosign_setup
-        uses: sigstore/cosign-installer@faadad0cce49287aee09b3a48701e75088a2c6ad  # v4.0.0
+        # v4.0.0
+        uses: sigstore/cosign-installer@faadad0cce49287aee09b3a48701e75088a2c6ad
         with:
           cosign-release: ${{ env.COSIGN_VERSION }}
 

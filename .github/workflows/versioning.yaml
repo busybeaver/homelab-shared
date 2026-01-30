@@ -1,3 +1,4 @@
+---
 name: 'Versioning CI'
 
 "on":
@@ -11,7 +12,8 @@ name: 'Versioning CI'
       - completed
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: >-
+    ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
@@ -82,5 +84,8 @@ jobs:
         id: git_tag_semantic_version
         if: steps.git_determine_semantic_version.outputs.version_type != 'none'
         run: |
-          git tag -a "${{ steps.git_determine_semantic_version.outputs.version_tag }}" -m "repo=\"${{ github.repository }}\"" -m "workflow=\"${{ github.workflow }}\"" -m "ref=\"${{ github.sha }}\""
+          git tag -a "${{ steps.git_determine_semantic_version.outputs.version_tag }}" \
+            -m "repo=\"${{ github.repository }}\"" \
+            -m "workflow=\"${{ github.workflow }}\"" \
+            -m "ref=\"${{ github.sha }}\""
           git push origin "${{ steps.git_determine_semantic_version.outputs.version_tag }}"
