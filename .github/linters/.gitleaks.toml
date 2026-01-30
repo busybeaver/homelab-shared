@@ -1,3 +1,11 @@
+# Gitleaks configuration v8
+[allowlist]
+  paths = [
+    '''gitleaks\.toml''',
+    '''(?i).*\.(png|jpg|gif|doc|docx|pdf|bin|xls|pyc|zip)$''',
+    '''go\.(mod|sum)$'''
+  ]
+
 [[rules]]
   id = "aws-access-key"
   description = "AWS Access Key"
@@ -159,10 +167,3 @@
   description = "PyPI upload token"
   regex = '''pypi-AgEIcHlwaS5vcmc[A-Za-z0-9-_]{50,1000}'''
   tags = ["key", "pypi"]
-
-[allowlist]
-  paths = [
-    '''gitleaks\.toml''',
-    '''(?i).*\.(png|jpg|gif|doc|docx|pdf|bin|xls|pyc|zip)$''',
-    '''go\.(mod|sum)$'''
-  ]

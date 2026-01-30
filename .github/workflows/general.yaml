@@ -35,8 +35,6 @@ name: 'General CI'
         default: false
     secrets:
       # necessary permissions: 'contents: read', 'statuses: write'
-      # GITHUB_TOKEN:
-      #   required: true
       GITGUARDIAN_API_KEY:
         description: API key used for authenticating against the GitGuardian APIs
         required: true
@@ -140,7 +138,7 @@ jobs:
       - name: GitGuardian - Scan For Commited Secrets
         id: gitguardian_scan
         uses: GitGuardian/ggshield-action@247ad4911092eee12989d379779c115632de6f84  # v1.47.0
-        continue-on-error: true  # workaround for issue: https://github.com/actions/checkout/issues/1169
+        continue-on-error: true  # workaround for issue: actions/checkout#1169
         env:
           GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
 
@@ -182,5 +180,6 @@ jobs:
       - name: Cosign - Verify Public Key
         id: cosign_verify
         run: |
-          cosign verify-blob --key cosign.pub --signature cosign.pub.sig cosign.pub
+          cosign verify-blob --key cosign.pub \
+            --signature cosign.pub.sig cosign.pub
         working-directory: ./public_key/
