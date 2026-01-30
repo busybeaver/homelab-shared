@@ -17,15 +17,20 @@ name: 'General CI'
   workflow_call:
     inputs:
       filterRegexExclude:
-        description: 'Regular expression defining which files will be excluded from linting'
+        description: >-
+          Regular expression defining which files will be excluded from linting
         type: string
         default: none
       lintTypescript:
-        description: 'Flag to enable or disable the linting process of the TypeScript language. (Utilizing: eslint)'
+        description: >-
+          Flag to enable or disable the linting process of the TypeScript
+          language. (Utilizing: eslint)
         type: boolean
         default: false
       lintDocker:
-        description: 'Flag to enable or disable the linting process of the Docker language. (Utilizing: hadolint)'
+        description: >-
+          Flag to enable or disable the linting process of the Docker language.
+          (Utilizing: hadolint)
         type: boolean
         default: false
     secrets:
@@ -135,7 +140,7 @@ jobs:
       - name: GitGuardian - Scan For Commited Secrets
         id: gitguardian_scan
         uses: GitGuardian/ggshield-action@247ad4911092eee12989d379779c115632de6f84  # v1.47.0
-        continue-on-error: true  # TODO: workaround for issue: https://github.com/actions/checkout/issues/1169
+        continue-on-error: true  # workaround for issue: https://github.com/actions/checkout/issues/1169
         env:
           GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
 

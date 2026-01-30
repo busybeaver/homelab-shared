@@ -1,9 +1,9 @@
 # Gitleaks configuration v8
 [allowlist]
 paths = [
-  "gitleaks.toml",
-  "(?i).*\\.(png|jpg|gif|doc|docx|pdf|bin|xls|pyc|zip)$",
-  "go\\.(mod|sum)$"
+  'gitleaks.toml',
+  '(?i).*\.(png|jpg|gif|doc|docx|pdf|bin|xls|pyc|zip)$',
+  'go\.(mod|sum)$'
 ]
 
 [[rules]]
@@ -83,6 +83,12 @@ id = "mailgun-api-key"
 description = "Mailgun API key"
 regex = '''((?i)(mailgun|mg)(.{0,20})?)?key-[0-9a-z]{32}'''
 tags = ["key", "Mailgun"]
+
+[[rules]]
+id = "paypal-braintree-token"
+description = "PayPal Braintree access token"
+regex = '''access_token\$production\$[0-9a-z]{16}\$[0-9a-f]{32}'''
+tags = ["key", "Paypal"]
 
 [[rules]]
 id = "picatic-api-key"

@@ -60,5 +60,6 @@ jobs:
           COMMIT_PREFIX: "chore: "
           COMMIT_BODY: "Synchronize Repository Configuration"
           PR_BODY: "Synchronize Repository Configuration"
-          GIT_EMAIL: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}+repository-assistant[bot]@users.noreply.github.com
+          GIT_EMAIL: >-
+            ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}+repository-assistant[bot]@users.noreply.github.com
           GIT_USERNAME: repository-assistant[bot]
