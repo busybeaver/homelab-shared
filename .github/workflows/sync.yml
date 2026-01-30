@@ -38,7 +38,7 @@ jobs:
         with:
           egress-policy: audit
           disable-telemetry: true
-          disable-sudo-and-containers: true
+          disable-sudo: true
 
       - name: Git - Checkout
         id: git_checkout

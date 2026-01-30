@@ -177,7 +177,7 @@ jobs:
         with:
           egress-policy: audit
           disable-telemetry: true
-          disable-sudo-and-containers: true
+          disable-sudo: true
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
