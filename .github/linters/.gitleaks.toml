@@ -1,9 +1,9 @@
 # Gitleaks configuration v8
 [allowlist]
   paths = [
-    '''gitleaks\.toml''',
-    '''(?i).*\.(png|jpg|gif|doc|docx|pdf|bin|xls|pyc|zip)$''',
-    '''go\.(mod|sum)$'''
+    "gitleaks\\.toml",
+    "(?i).*\\.(png|jpg|gif|doc|docx|pdf|bin|xls|pyc|zip)$",
+    "go\\.(mod|sum)$"
   ]
 
 [[rules]]
@@ -15,7 +15,7 @@
 [[rules]]
   id = "aws-secret-key"
   description = "AWS Secret Key"
-  regex = '''(?i)aws_(.{0,20})?=?.['\"0-9a-zA-Z\/+]{40}'''
+  regex = '''(?i)aws_(.{0,20})?=?.['"0-9a-zA-Z\/+]{40}'''
   tags = ["key", "AWS"]
 
 [[rules]]
