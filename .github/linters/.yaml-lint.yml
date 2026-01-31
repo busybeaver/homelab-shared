@@ -7,4 +7,3 @@ rules:
     level: warning
   document-start:
     level: error
-    present: true
