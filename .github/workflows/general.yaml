@@ -1,3 +1,4 @@
+---
 name: 'General CI'
 
 "on":
@@ -37,9 +38,8 @@ name: 'General CI'
         required: true
 
 concurrency:
-  # on main, we want all builds to complete even if commits/merging happens faster to make it easier to discover at which point
-  # something broke; else, we cancel "old" builds and run/(re)start the build with the latest changes
-  group: ${{ github.ref == 'refs/heads/main' && format('ci-main-{0}-{1}', github.workflow, github.sha) || format('ci-{0}-{1}', github.workflow, github.ref) }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   code_quality:
@@ -75,7 +75,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9 # v2.14.1
+        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.14.1
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -103,7 +103,7 @@ jobs:
 
       - name: SuperLinter - Lint Files
         id: superlinter_scan
-        uses: github/super-linter/slim@45fc0d88288beee4701c62761281edfee85655d7  # v5.0.0
+        uses: super-linter/super-linter/slim@12562e482705e324021204d8091ecf193c683b79  # v8.4.0
 
   git_secrets:
     name: 'Git Secret Exposure Checks'
@@ -121,7 +121,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9 # v2.14.1
+        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.14.1
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -129,14 +129,14 @@ jobs:
 
       - name: Git - Checkout
         id: git_checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
         with:
           # Checkout full git history; required by GitGuardian
           fetch-depth: 0
 
       - name: GitGuardian - Scan For Commited Secrets
         id: gitguardian_scan
-        uses: GitGuardian/ggshield-action@8b29edc57b582045b12d45c8cc8f8040e121693b  # v1.46.0
+        uses: GitGuardian/ggshield-action@247ad491f63056094592ca097e37e96b83f08962  # v1.47.0
         continue-on-error: true  # TODO: workaround for issue: https://github.com/actions/checkout/issues/1169
         env:
           GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
@@ -160,19 +160,20 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9 # v2.14.1
+        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.14.1
         with:
           egress-policy: audit
           disable-telemetry: true
           disable-sudo: true
+          disable-sudo-and-containers: true
 
       - name: Git - Checkout
         id: git_checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
 
       - name: Cosign - Setup
         id: cosign_setup
-        uses: sigstore/cosign-installer@faadad0cce49287aee09b3a48701e75088a2c6ad # v4.0.0
+        uses: sigstore/cosign-installer@faadad0cce49287aee09b3a48701e75088a2c6ad  # v4.0.0
         with:
           cosign-release: ${{ env.COSIGN_VERSION }}
 
