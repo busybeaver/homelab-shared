@@ -18,3 +18,9 @@ id = "github-pat"
 description = "Github Personal Access Token"
 regex = "ghp_[0-9a-zA-Z]{36}"
 tags = ["key", "Github"]
+
+[[rules]]
+id = "asymmetric-private-key"
+description = "Asymmetric Private Key"
+regex = "-----BEGIN ((EC|PGP|DSA|RSA|OPENSSH) )?PRIVATE KEY( BLOCK)?-----"
+tags = ["key", "AsymmetricPrivateKey"]
