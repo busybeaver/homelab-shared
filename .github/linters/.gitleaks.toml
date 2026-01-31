@@ -2,9 +2,9 @@ title = "gitleaks config"
 
 [allowlist]
 paths = [
-    '''\.gitleaks\.toml$''',
-    '''(.*?)(png|jpg|gif|doc|docx|pdf|bin|xls|pyc|zip)$''',
-    '''(go\.mod|go\.sum)$'''
+    '\.gitleaks\.toml$',
+    '(.*?)(png|jpg|gif|doc|docx|pdf|bin|xls|pyc|zip)$',
+    '(go\.mod|go\.sum)$'
 ]
 
 [[rules]]
@@ -16,7 +16,7 @@ tags = ["key", "AWS"]
 [[rules]]
 id = "aws-secret-key"
 description = "AWS Secret Key"
-regex = '''(?i)aws_(.{0,20})?=?.[\'\"0-9a-zA-Z\/+]{40}'''
+regex = '''(?i)aws_(.{0,20})?=?.['"0-9a-zA-Z/+]{40}'''
 tags = ["key", "AWS"]
 
 [[rules]]
