@@ -103,7 +103,7 @@ jobs:
 
       - name: SuperLinter - Lint Files
         id: superlinter_scan
-        uses: super-linter/super-linter/slim@12562e482705e324021204d8091ecf193c683b79  # v8.4.0
+        uses: super-linter/super-linter/slim@12562e48d7059cf666c43a4ecb0d3b5a2b31bd9e  # v8.4.0
 
   git_secrets:
     name: 'Git Secret Exposure Checks'
@@ -136,7 +136,7 @@ jobs:
 
       - name: GitGuardian - Scan For Commited Secrets
         id: gitguardian_scan
-        uses: GitGuardian/ggshield-action@247ad491f63056094592ca097e37e96b83f08962  # v1.47.0
+        uses: GitGuardian/ggshield-action@29c20c7cb174d8ad12faaf074be0813fbc5cc302  # v1.47.0
         continue-on-error: true  # TODO: workaround for issue: https://github.com/actions/checkout/issues/1169
         env:
           GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
