@@ -44,6 +44,7 @@ jobs:
           egress-policy: audit
           disable-telemetry: true
           disable-sudo: true
+          disable-sudo-and-containers: true
 
       - name: TESTING
         id: cosign_sign

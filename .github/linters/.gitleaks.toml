@@ -2,31 +2,43 @@ title = "gitleaks config"
 
 [allowlist]
 paths = [
-    "\\.gitleaks\\.toml$",
-    "(.*?)(png|jpg|gif|doc|docx|pdf|bin|xls|pyc|zip)$",
-    "(go\\.mod|go\\.sum)$"
+    '''\.gitleaks\.toml$''',
+    '''(.*?)(png|jpg|gif|doc|docx|pdf|bin|xls|pyc|zip)$''',
+    '''(go\.mod|go\.sum)$'''
 ]
 
 [[rules]]
 id = "aws-access-key"
 description = "AWS Access Key"
-regex = "(A3T[A-Z0-9]|AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}"
+regex = '''(A3T[A-Z0-9]|AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}'''
 tags = ["key", "AWS"]
 
 [[rules]]
 id = "aws-secret-key"
 description = "AWS Secret Key"
-regex = "(?i)aws_(.{0,20})?=?.[\'\"0-9a-zA-Z\\/+]{40}"
+regex = '''(?i)aws_(.{0,20})?=?.['"0-9a-zA-Z\/+]{40}'''
 tags = ["key", "AWS"]
 
 [[rules]]
 id = "github-pat"
 description = "Github Personal Access Token"
-regex = "ghp_[0-9a-zA-Z]{36}"
+regex = '''ghp_[0-9a-zA-Z]{36}'''
 tags = ["key", "Github"]
 
 [[rules]]
 id = "asymmetric-private-key"
 description = "Asymmetric Private Key"
-regex = "-----BEGIN ((EC|PGP|DSA|RSA|OPENSSH) )?PRIVATE KEY( BLOCK)?-----"
+regex = '''-----BEGIN ((EC|PGP|DSA|RSA|OPENSSH) )?PRIVATE KEY( BLOCK)?-----'''
 tags = ["key", "AsymmetricPrivateKey"]
+
+[[rules]]
+id = "google-api-key"
+description = "Google API key"
+regex = '''AIza[0-9A-Za-z\-_]{35}'''
+tags = ["key", "Google"]
+
+[[rules]]
+id = "slack-token"
+description = "Slack"
+regex = '''xox[baprs]-([0-9a-zA-Z]{10,48})?'''
+tags = ["key", "Slack"]
