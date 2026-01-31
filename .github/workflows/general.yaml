@@ -136,7 +136,7 @@ jobs:
 
       - name: GitGuardian - Scan For Commited Secrets
         id: gitguardian_scan
-        uses: GitGuardian/ggshield-action@8b29edc57b582045b12d45c8cc8f8040e121693b  # v1.46.0
+        uses: GitGuardian/ggshield-action@247ad4911092eee12989d379779c115632de6f84  # v1.47.0
         continue-on-error: true  # TODO: workaround for issue: https://github.com/actions/checkout/issues/1169
         env:
           GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
