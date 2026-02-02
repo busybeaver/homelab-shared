@@ -206,4 +206,4 @@ tags = ["key", "pypi"]
 
 [allowlist]
 description = "Allowlisted files"
-paths = ['''^\.?gitleaks.toml$''', '''(.*?)(png|jpg|gif|doc|docx|pdf|bin|xls|pyc|zip)$''', '''(go.mod|go.sum)$''']
+regexes = ['''^\.?gitleaks.toml$''', '''(.*?)(png|jpg|gif|doc|docx|pdf|bin|xls|pyc|zip)$''', '''(go.mod|go.sum)$''']
