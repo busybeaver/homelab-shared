@@ -1,4 +1,4 @@
-title = "gitleaks default config"
+title = "gitleaks config"
 
 [[rules]]
 id = "aws-access-key"
@@ -15,7 +15,7 @@ tags = ["key", "AWS"]
 [[rules]]
 id = "aws-mws-key"
 description = "AWS MWS key"
-regex = '''amzn\.mws\.[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'''
+regex = '''amzn\.mws\.[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'''
 tags = ["key", "AWS", "MWS"]
 
 [[rules]]
@@ -203,3 +203,10 @@ id = "pypi-upload-token"
 description = "PyPI upload token"
 regex = '''pypi-AgEIcHlwaS5vcmc[A-Za-z0-9-_]{50,1000}'''
 tags = ["key", "pypi"]
+
+[allowlist]
+paths = [
+    '''\.gitleaks\.toml$''',
+    '''(.*?)(png|jpg|gif|doc|docx|pdf|bin|xls|pyc|zip)$''',
+    '''(go.mod|go.sum)$'''
+]
