@@ -105,7 +105,7 @@ tags = ["key", "Google"]
 [[rules]]
 id = "heroku-api-key"
 description = "Heroku API key"
-regex = '''(?i)heroku(.{0,20})?[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{12}'''
+regex = '''(?i)heroku(.{0,20})?[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'''
 tags = ["key", "Heroku"]
 
 [[rules]]
@@ -170,7 +170,7 @@ tags = ["key", "twilio"]
 
 [[rules]]
 id = "dynatrace-token"
-description = "Dynatrace ttoken"
+description = "Dynatrace token"
 regex = '''dt0[a-zA-Z]{1}[0-9]{2}\.[A-Z0-9]{24}\.[A-Z0-9]{64}'''
 tags = ["key", "Dynatrace"]
 

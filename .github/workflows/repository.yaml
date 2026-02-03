@@ -58,7 +58,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.10.3
+        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.14.1
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -73,7 +73,7 @@ jobs:
 
       - name: GitHub - Auto Approve Pull Request
         id: github_auto_approve_pr
-        uses: hmarr/auto-approve-action@f00137cf979927b2b07e78d91c28c86d8b76c8e3  # v4.0.0
+        uses: hmarr/auto-approve-action@f0939ea97e9205ef24d872e76833fa908a770363  # v4.0.0
         with:
           github-token: ${{ steps.github_generate_app_token.outputs.token }}
 
@@ -97,7 +97,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.10.3
+        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.14.1
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -112,7 +112,7 @@ jobs:
 
       - name: GitHub - Enable PR Auto Merge
         id: github_enable_pr_auto_merge
-        uses: peter-evans/enable-pull-request-automerge@a1c5188f6c38b2a3a08892795847528e93233a7e  # v6.0.2
+        uses: peter-evans/enable-pull-request-automerge@a660677d5469627102a1c1e11409dd063606628d  # v3.0.0
         with:
           token: ${{ steps.github_generate_app_token.outputs.token }}
           pull-request-number: ${{ github.event.pull_request.number }}
@@ -136,7 +136,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.10.3
+        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.14.1
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -151,7 +151,7 @@ jobs:
 
       - name: GitHub - Semantic Pull Request
         id: github_semantic_pull_request
-        uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50  # v5.5.3
+        uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50  # v6.1.1
         env:
           GITHUB_TOKEN: ${{ steps.github_generate_app_token.outputs.token }}
 
@@ -172,7 +172,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.10.3
+        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.14.1
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -187,7 +187,7 @@ jobs:
 
       - name: GitHub - Conventional Commit Messages
         id: github_conventional_commit_messages
-        uses: gsactions/commit-message-checker@1a6d23537877bb08180735bed6d78709406056d3  # v2.0.0
+        uses: gsactions/commit-message-checker@16fa2d5de096ae0d35626443bcd24f1e756cafee  # v2.0.0
         with:
           pattern: ^(?:Merge branch \')|(?:(?:feat|fix|build|chore|ci|docs|style|refactor|perf|test)(?:\((?:\w|\s|\-|_)+\))?(?:!)?:\s\w+)
           error: 'The commit message title did not follow the conventional commits specification'
