@@ -1,4 +1,5 @@
 ---
+# Shared CI workflow for homelab repositories
 name: 'General CI'
 
 "on":
