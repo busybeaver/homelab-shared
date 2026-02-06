@@ -132,7 +132,7 @@ jobs:
         id: git_checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
         with:
-          # Checkout full git history; required by GitGuardian
+          # Checkout full git history; required by git-leaks
           fetch-depth: 0
 
       - name: GitGuardian - Scan For Commited Secrets
