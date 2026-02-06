@@ -122,8 +122,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
-    # run on all pull requests, but skip if the title is the one we can't change
-    if: github.event_name == 'pull_request_target' && github.event.pull_request.title != 'Improve GitHub Workflows and Linter Configs'
+    # run on all pull requests
+    if: github.event_name == 'pull_request_target'
 
     defaults:
       run:
