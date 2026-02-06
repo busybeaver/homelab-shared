@@ -1,3 +1,4 @@
+---
 name: 'Versioning CI'
 
 "on":
@@ -10,9 +11,9 @@ name: 'Versioning CI'
       - completed
 
 concurrency:
-  # on main, we want all builds to complete even if commits/merging happens faster to make it easier to discover at which point
-  # something broke; else, we cancel "old" builds and run/(re)start the build with the latest changes
-  group: ${{ github.ref == 'refs/heads/main' && format('ci-main-{0}-{1}', github.workflow, github.sha) || format('ci-{0}-{1}', github.workflow, github.ref) }}
+  group: >-
+    ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   semantic_versioning:
@@ -39,11 +40,11 @@ jobs:
         with:
           egress-policy: audit
           disable-telemetry: true
-          disable-sudo: true
+          disable-sudo-and-containers: true
 
       - name: Git - Checkout
         id: git_checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
         with:
           # required by PaulHatch/semantic-version
           fetch-depth: 0
@@ -77,5 +78,8 @@ jobs:
         id: git_tag_semantic_version
         if: steps.git_determine_semantic_version.outputs.version_type != 'none'
         run: |
-          git tag -a "${{ steps.git_determine_semantic_version.outputs.version_tag }}" -m "repo=\"${{ github.repository }}\"" -m "workflow=\"${{ github.workflow }}\"" -m "ref=\"${{ github.sha }}\""
+          git tag -a "${{ steps.git_determine_semantic_version.outputs.version_tag }}" \
+            -m "repo=\"${{ github.repository }}\"" \
+            -m "workflow=\"${{ github.workflow }}\"" \
+            -m "ref=\"${{ github.sha }}\""
           git push origin "${{ steps.git_determine_semantic_version.outputs.version_tag }}"
