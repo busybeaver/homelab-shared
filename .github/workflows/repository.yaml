@@ -111,7 +111,7 @@ jobs:
 
       - name: GitHub - Enable PR Auto Merge
         id: github_enable_pr_auto_merge
-        uses: peter-evans/enable-pull-request-automerge@a660677d5469627102a1c1e11409dd063606628d  # v3.0.0
+        uses: peter-evans/enable-pull-request-automerge@a1c5188f6c38b2a3a08892795847528e93233a7e  # v6.0.2
         with:
           token: ${{ steps.github_generate_app_token.outputs.token }}
           pull-request-number: ${{ github.event.pull_request.number }}
@@ -150,7 +150,7 @@ jobs:
 
       - name: GitHub - Semantic Pull Request
         id: github_semantic_pull_request
-        uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50  # v6.1.1
+        uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50  # v5.5.3
         env:
           GITHUB_TOKEN: ${{ steps.github_generate_app_token.outputs.token }}
 
