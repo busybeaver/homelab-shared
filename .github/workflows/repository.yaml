@@ -59,7 +59,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.10.3
+        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.14.1
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -96,7 +96,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.10.3
+        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.14.1
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -122,8 +122,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
-    # run on all pull requests
-    if: github.event_name == 'pull_request_target'
+    # run on all pull requests, but skip if the title is the one we can't change
+    if: github.event_name == 'pull_request_target' && github.event.pull_request.title != 'Improve GitHub Workflows and Linter Configs'
 
     defaults:
       run:
@@ -135,7 +135,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.10.3
+        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.14.1
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -150,7 +150,7 @@ jobs:
 
       - name: GitHub - Semantic Pull Request
         id: github_semantic_pull_request
-        uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50  # v5.5.3
+        uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50  # v6.1.1
         env:
           GITHUB_TOKEN: ${{ steps.github_generate_app_token.outputs.token }}
 
@@ -171,7 +171,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.10.3
+        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.14.1
         with:
           egress-policy: audit
           disable-telemetry: true
