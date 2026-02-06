@@ -1,3 +1,4 @@
+---
 name: 'Public Key CI'
 
 "on":
@@ -8,9 +9,9 @@ name: 'Public Key CI'
       - completed
 
 concurrency:
-  # on main, we want all builds to complete even if commits/merging happens faster to make it easier to discover at which point
-  # something broke; else, we cancel "old" builds and run/(re)start the build with the latest changes
-  group: ${{ github.ref == 'refs/heads/main' && format('ci-main-{0}-{1}', github.workflow, github.sha) || format('ci-{0}-{1}', github.workflow, github.ref) }}
+  group: >-
+    ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   public_key_verification:
@@ -35,15 +36,15 @@ jobs:
     env:
       # renovate: datasource=github-releases depName=sigstore/cosign
       COSIGN_VERSION: v3.0.4
-      REGISTRY: ghcr.io # GitHub Registry
+      REGISTRY: ghcr.io  # GitHub Registry
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.14.1
+        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9  # v2.10.3
         with:
           egress-policy: audit
           disable-telemetry: true
-          disable-sudo: true
+          disable-sudo-and-containers: true
 
       - name: TESTING
         id: cosign_sign
@@ -56,14 +57,14 @@ jobs:
 
       # - name: Git - Checkout
       #   id: git_checkout
-      #   uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b # v3.2.0
+      #   uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
       #   with:
       #     # required by tj-actions/changed-files
       #     fetch-depth: 2
 
       # - name: Cosign - Setup
       #   id: cosign_setup
-      #   uses: sigstore/cosign-installer@9becc617647dfa20ae7b1151972e9b3a2c338a2b # v2.8.1
+      #   uses: sigstore/cosign-installer@faadad0cce49287aee09b3a48701e75088a2c6ad  # v4.0.0
       #   with:
       #     cosign-release: ${{ env.COSIGN_VERSION }}
 
