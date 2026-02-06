@@ -104,7 +104,7 @@ jobs:
 
       - name: SuperLinter - Lint Files
         id: superlinter_scan
-        uses: super-linter/super-linter@8495a43b27b87c7e59c1c69996d56f51aa9adfb9  # v7.1.0
+        uses: super-linter/super-linter/slim@12562e48d7059cf666c43a4ecb0d3b5a2b31bd9e  # v8.4.0
 
   git_secrets:
     name: 'Git Secret Exposure Checks'
