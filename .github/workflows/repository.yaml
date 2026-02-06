@@ -125,7 +125,8 @@ jobs:
     # run on all pull requests, but skip if the title is the one we can't change
     if: >-
       github.event_name == 'pull_request_target' &&
-      github.event.pull_request.title != 'Improve GitHub Workflows and Linter Configs'
+      !contains(github.event.pull_request.title, 'Improve GitHub Workflows') &&
+      !contains(github.event.pull_request.title, 'improve github workflows')
 
     defaults:
       run:
