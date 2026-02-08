@@ -126,8 +126,7 @@ jobs:
     if: >-
       github.event_name == 'pull_request_target' &&
       github.event.pull_request.user.login != 'renovate[bot]' &&
-      github.event.pull_request.user.login != 'snap-package-updater[bot]' &&
-      github.event.pull_request.head.ref != 'improve-github-workflows'
+      github.event.pull_request.user.login != 'snap-package-updater[bot]'
 
     defaults:
       run:
