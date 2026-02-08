@@ -43,7 +43,10 @@ jobs:
 
     # only auto-approve PRs that were opened by renovate or the snap-package updater
     # (but do NOT auto approve major updates)
-    if: github.event_name == 'pull_request_target' && (github.actor == 'renovate[bot]' || github.actor == 'snap-package-updater[bot]') && !contains(github.event.pull_request.labels.*.name, 'major-update')
+    if: >-
+      github.event_name == 'pull_request_target' &&
+      (github.actor == 'renovate[bot]' || github.actor == 'snap-package-updater[bot]') &&
+      !contains(github.event.pull_request.labels.*.name, 'major-update')
 
     defaults:
       run:
@@ -186,7 +189,7 @@ jobs:
         with:
           pattern: ^(?:Merge branch \')|(?:(?:feat|fix|build|chore|ci|docs|style|refactor|perf|test)(?:\((?:\w|\s|\-|_)+\))?(?:!)?:\s\w+)
           error: 'The commit message title did not follow the conventional commits specification'
-          excludeDescription: 'true' # excludes the description body of a pull request
-          excludeTitle: 'true' # excludes the title of a pull request
-          checkAllCommitMessages: 'true' # check all commits associated with a pull request
+          excludeDescription: 'true'  # excludes the description body of a pull request
+          excludeTitle: 'true'  # excludes the title of a pull request
+          checkAllCommitMessages: 'true'  # check all commits associated with a pull request
           accessToken: ${{ steps.github_generate_app_token.outputs.token }}

@@ -35,7 +35,7 @@ jobs:
     env:
       # renovate: datasource=github-releases depName=sigstore/cosign
       COSIGN_VERSION: v3.0.4
-      REGISTRY: ghcr.io # GitHub Registry
+      REGISTRY: ghcr.io  # GitHub Registry
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
