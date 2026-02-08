@@ -120,13 +120,14 @@ jobs:
     name: 'Semantic Pull Request Title'
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    continue-on-error: true
 
     # run on all pull requests
     if: >-
       github.event_name == 'pull_request_target' &&
       github.event.pull_request.user.login != 'renovate[bot]' &&
       github.event.pull_request.user.login != 'snap-package-updater[bot]' &&
-      github.head_ref != 'improve-github-workflows'
+      github.event.pull_request.head.ref != 'improve-github-workflows'
 
     defaults:
       run:
