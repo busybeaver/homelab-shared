@@ -1,3 +1,4 @@
+---
 name: "Repository CI"
 
 "on":
@@ -30,6 +31,10 @@ name: "Repository CI"
         description: The private key of the repository assistant GitHub app
         required: true
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
 jobs:
   pr_auto_approve:
     name: 'Auto Approve PR'
@@ -38,7 +43,10 @@ jobs:
 
     # only auto-approve PRs that were opened by renovate or the snap-package updater
     # (but do NOT auto approve major updates)
-    if: github.event_name == 'pull_request_target' && (github.actor == 'renovate[bot]' || github.actor == 'snap-package-updater[bot]') && !contains(github.event.pull_request.labels.*.name, 'major-update')
+    if: >-
+      github.event_name == 'pull_request_target' &&
+      (github.actor == 'renovate[bot]' || github.actor == 'snap-package-updater[bot]') &&
+      !contains(github.event.pull_request.labels.*.name, 'major-update')
 
     defaults:
       run:
@@ -54,7 +62,7 @@ jobs:
         with:
           egress-policy: audit
           disable-telemetry: true
-          disable-sudo: true
+          disable-sudo-and-containers: true
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
@@ -75,7 +83,9 @@ jobs:
     timeout-minutes: 5
 
     # only auto-merge PRs that were opened by renovate or the snap-package updater
-    if: github.event_name == 'pull_request_target' && (github.actor == 'renovate[bot]' || github.actor == 'snap-package-updater[bot]')
+    if: >-
+      github.event_name == 'pull_request_target' &&
+      (github.actor == 'renovate[bot]' || github.actor == 'snap-package-updater[bot]')
 
     defaults:
       run:
@@ -91,7 +101,7 @@ jobs:
         with:
           egress-policy: audit
           disable-telemetry: true
-          disable-sudo: true
+          disable-sudo-and-containers: true
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
@@ -102,7 +112,7 @@ jobs:
 
       - name: GitHub - Enable PR Auto Merge
         id: github_enable_pr_auto_merge
-        uses: peter-evans/enable-pull-request-automerge@a660677d5469627102a1c1e11409dd063606628d  # v3.0.0
+        uses: peter-evans/enable-pull-request-automerge@a1c5188f6c38b2a3a08892795847528e93233a7e  # v6.0.2
         with:
           token: ${{ steps.github_generate_app_token.outputs.token }}
           pull-request-number: ${{ github.event.pull_request.number }}
@@ -130,7 +140,7 @@ jobs:
         with:
           egress-policy: audit
           disable-telemetry: true
-          disable-sudo: true
+          disable-sudo-and-containers: true
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
@@ -166,7 +176,7 @@ jobs:
         with:
           egress-policy: audit
           disable-telemetry: true
-          disable-sudo: true
+          disable-sudo-and-containers: true
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
@@ -181,7 +191,7 @@ jobs:
         with:
           pattern: ^(?:Merge branch \')|(?:(?:feat|fix|build|chore|ci|docs|style|refactor|perf|test)(?:\((?:\w|\s|\-|_)+\))?(?:!)?:\s\w+)
           error: 'The commit message title did not follow the conventional commits specification'
-          excludeDescription: 'true' # excludes the description body of a pull request
-          excludeTitle: 'true' # excludes the title of a pull request
-          checkAllCommitMessages: 'true' # check all commits associated with a pull request
+          excludeDescription: 'true'  # excludes the description body of a pull request
+          excludeTitle: 'true'  # excludes the title of a pull request
+          checkAllCommitMessages: 'true'  # check all commits associated with a pull request
           accessToken: ${{ steps.github_generate_app_token.outputs.token }}
