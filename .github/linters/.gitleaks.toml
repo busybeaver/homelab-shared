@@ -1,9 +1,4 @@
-[allowlist]
-paths = [
-    '''(?i).*\.(png|jpg|gif|doc|docx|pdf|bin|xls|pyc|zip)$''',
-    '''(?i)go\.(mod|sum)$''',
-    '''(?i)^\.?gitleaks\.toml$'''
-]
+title = "gitleaks default config: https://github.com/zricethezav/gitleaks/blob/master/config/gitleaks.toml"
 
 [[rules]]
 id = "aws-access-key"
@@ -110,7 +105,7 @@ tags = ["key", "Google"]
 [[rules]]
 id = "heroku-api-key"
 description = "Heroku API key"
-regex = '''(?i)heroku(.{0,20})?[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{12}'''
+regex = '''(?i)heroku(.{0,20})?[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'''
 tags = ["key", "Heroku"]
 
 [[rules]]
@@ -208,3 +203,12 @@ id = "pypi-upload-token"
 description = "PyPI upload token"
 regex = '''pypi-AgEIcHlwaS5vcmc[A-Za-z0-9-_]{50,1000}'''
 tags = ["key", "pypi"]
+
+[allowlist]
+description = "Allowlisted files"
+paths = [
+    '''^\.?gitleaks\.toml$''',
+    '''(.*?)(png|jpg|gif|doc|docx|pdf|bin|xls|pyc|zip)$''',
+    '''(go\.mod|go\.sum)$'''
+]
+regexes = []
