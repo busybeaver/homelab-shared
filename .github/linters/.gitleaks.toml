@@ -1,7 +1,7 @@
 title = "gitleaks default config"
 
-[[allowlists]]
-description = "global allow lists"
+[allowlist]
+description = "global allow list"
 paths = [
     '''(?i).*\.(png|jpg|gif|doc|docx|pdf|bin|xls|pyc|zip)$''',
     '''(?i)go\.(mod|sum)$''',
