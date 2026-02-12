@@ -1,8 +1,8 @@
-# Public Siging Key
+# Public Signing Key
 
 The `homelab-*` repositories sign artifacts (such as Docker images) during the build process to verify the artifacts before using/running them (i.e. to verify the supply chain).
 
-For siging purposes, [Sigstore cosign](https://www.sigstore.dev) is used.
+For signing purposes, [Sigstore cosign](https://www.sigstore.dev) is used.
 
 ## Installation
 
@@ -10,7 +10,7 @@ Have a look at the [installation documentation](https://docs.sigstore.dev/cosign
 
 ## Verification of the Public Key
 
-Cosign allows to verify Docker images and file blobs. To e.g. verify the `cosing.pub` public key in this repository, you can run:
+Cosign allows to verify Docker images and file blobs. To e.g. verify the `cosign.pub` public key in this repository, you can run:
 
 ```shell
 cosign verify-blob --key cosign.pub --signature $(cat cosign.pub.sig) cosign.pub
@@ -28,7 +28,7 @@ Or by plainly downloading it via `curl`:
 curl -L https://ghcr.io/v2/busybeaver/homelab-shared/cosign.pub/blobs/sha256:c5905f796789e76f7a384f4acb67589d527e39e5e0566d6b7809cbcd4654e7e5 > cosign_from_registry.pub
 ```
 
-## Verification of the Aritfacts
+## Verification of the Artifacts
 
 To verify Docker images:
 
