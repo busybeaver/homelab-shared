@@ -1,6 +1,6 @@
-title = "gitleaks default config: https://github.com/zricethezav/gitleaks/blob/master/config/gitleaks.toml"
+title = "gitleaks default config"
 
-[allowlist]
+[[allowlists]]
 description = "global allow lists"
 paths = [
     '''(?i).*\.(png|jpg|gif|doc|docx|pdf|bin|xls|pyc|zip)$''',
