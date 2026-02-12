@@ -123,10 +123,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
-    # run on all pull requests (skip for non-conforming initial title)
-    if: >-
-      github.event_name == 'pull_request_target' &&
-      github.event.pull_request.title != 'Improve GitHub Action workflows security and maintainability'
+    # run on all pull requests
+    if: github.event_name == 'pull_request_target'
     continue-on-error: true
 
     defaults:
