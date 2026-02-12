@@ -1,12 +1,12 @@
 title = "gitleaks default config: https://github.com/zricethezav/gitleaks/blob/master/config/gitleaks.toml"
 
-[allowlist]
+[[allowlists]]
+description = "global allow lists"
 paths = [
     '''(?i).*\.(png|jpg|gif|doc|docx|pdf|bin|xls|pyc|zip)$''',
     '''(?i)go\.(mod|sum)$''',
     '''(?i)^\.?gitleaks\.toml$'''
 ]
-regexes = []
 
 [[rules]]
 id = "aws-access-key"
