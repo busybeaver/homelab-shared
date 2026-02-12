@@ -71,6 +71,8 @@ jobs:
       VALIDATE_NATURAL_LANGUAGE: true
       VALIDATE_SHELL_SHFMT: true
       VALIDATE_YAML: true
+      # https://github.com/super-linter/super-linter/blob/main/docs/run-linter-locally.md#enabling-step-summary
+      SAVE_SUPER_LINTER_SUMMARY: true
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
