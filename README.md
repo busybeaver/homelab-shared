@@ -24,7 +24,7 @@ just init
 
 ## Development
 
-For a list of available commands, just run `just` within the git repository.
+For a list of available commands, just run `just` within the Git repository.
 
 Use [act](https://github.com/nektos/act) to run the GitHub Actions CI flow locally.
 
