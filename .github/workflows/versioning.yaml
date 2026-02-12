@@ -49,7 +49,7 @@ jobs:
         with:
           # required by PaulHatch/semantic-version
           fetch-depth: 0
-          # this is the token (i.e. the user) that is used for git operations
+          # this is the token (i.e. the user) that is used for Git operations
           token: ${{ secrets.GH_AUTOMATION_TOKEN }}
 
       - name: Git - Determine Semantic Version

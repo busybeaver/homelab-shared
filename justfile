@@ -32,7 +32,7 @@ format *files:
 check *files:
   @just _run_shared check {{files}}
 
-# assisted conventional commits with git
+# assisted conventional commits with Git
 commit *args:
   @just _run_shared commit {{args}}
 
