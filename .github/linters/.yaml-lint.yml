@@ -1,7 +1,17 @@
+---
 extends: default
 
 rules:
   line-length:
-    max: 80
+    max: 150
     level: warning
-  document-start: disable
+  document-start:
+    level: warning
+  braces:
+    min-spaces-inside: 0
+    max-spaces-inside: 0
+  comments-indentation:
+    level: warning
+  comments:
+    level: warning
+    min-spaces-from-content: 2
