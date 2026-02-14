@@ -123,8 +123,10 @@ jobs:
     timeout-minutes: 5
     continue-on-error: true
 
-    # run on all pull requests
-    if: github.event_name == 'pull_request_target'
+    # run on all pull requests (but skip for certain labels)
+    if: >-
+      github.event_name == 'pull_request_target' &&
+      !contains(github.event.pull_request.labels.*.name, 'skip-semantic-pull-request')
 
     defaults:
       run:
@@ -160,7 +162,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
-    # run on all commits and pull requests
+    # run on all commits (triggered by push or pull_request_target)
     if: github.event_name != 'pull_request'
 
     defaults:
