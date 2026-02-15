@@ -42,7 +42,6 @@ jobs:
     env:
       # renovate: datasource=github-releases depName=sigstore/cosign
       COSIGN_VERSION: v3.0.4
-      REGISTRY: ghcr.io  # GitHub Registry
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
@@ -72,32 +71,4 @@ jobs:
           files: |
             ./public_key/cosign.pub
 
-      # TODO: implement the signing logic
-
-      # - name: Docker - Log into Registry
-      #   id: docker_login
-      #   uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9  # v3.7.0
-      #   if: steps.git_changed_files.outputs.any_changed == 'true'
-      #   with:
-      #     registry: ${{ env.REGISTRY }}
-      #     username: ${{ github.actor }}
-      #     password: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Cosign - Upload and Sign Public Key
-      #   id: cosign_sign
-      #   run: |
-      #     ARTIFACT="${{ env.REGISTRY }}/${{ github.repository }}/cosign.pub"
-      #     cosign upload blob -f cosign.pub --verbose \
-      #       -a "repo=${{ github.repository }}" \
-      #       -a "workflow=${{ github.workflow }}" \
-      #       -a "ref=${{ github.sha }}" \
-      #       "${ARTIFACT}"
-      #     cosign sign --key env://COSIGN_PRIVATE_KEY --verbose \
-      #       -a "repo=${{ github.repository }}" \
-      #       -a "workflow=${{ github.workflow }}" \
-      #       -a "ref=${{ github.sha }}" \
-      #       "${ARTIFACT}"
-      #   working-directory: ./public_key/
-      #   env:
-      #     COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
-      #     COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+      # TODO: implement the signing and upload logic as needed
