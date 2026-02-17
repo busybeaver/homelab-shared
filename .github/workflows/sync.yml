@@ -1,3 +1,5 @@
+---
+# Workflow to synchronize files across repositories
 name: "Sync CI"
 
 "on":
@@ -11,6 +13,10 @@ name: "Sync CI"
     - cron: '0 12 * * 1'
   # run manually
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   sync_config:
@@ -32,11 +38,11 @@ jobs:
         with:
           egress-policy: audit
           disable-telemetry: true
-          disable-sudo: true
+          disable-sudo-and-containers: true
 
       - name: Git - Checkout
         id: git_checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
