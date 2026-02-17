@@ -1,3 +1,4 @@
+---
 group:
   repos: |
     busybeaver/homelab-iac
@@ -5,6 +6,7 @@ group:
     busybeaver/homelab-services
   files:
     - .github/linters/
+    - .github/workflows/
     - .github/act_event.json
     - .github/CODEOWNERS
     - .github/justfile.shared
