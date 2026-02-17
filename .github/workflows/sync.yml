@@ -1,4 +1,5 @@
 ---
+# Workflow to synchronize files across repositories
 name: "Sync CI"
 
 "on":
