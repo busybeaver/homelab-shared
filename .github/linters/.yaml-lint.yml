@@ -2,6 +2,13 @@ extends: default
 
 rules:
   line-length:
-    max: 80
+    max: 150
     level: warning
-  document-start: disable
+  document-start:
+    level: warning
+  braces:
+    min-spaces-inside: 0
+    max-spaces-inside: 0
+  brackets:
+    min-spaces-inside: 0
+    max-spaces-inside: 0
