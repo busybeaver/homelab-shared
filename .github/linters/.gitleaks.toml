@@ -1,4 +1,12 @@
-title = "gitleaks default config"
+title = "gitleaks config"
+
+[allowlist]
+description = "Global allowlist"
+paths = [
+    '''\.?gitleaks\.toml$''',
+    '''(.*?)(png|jpg|gif|doc|docx|pdf|bin|xls|pyc|zip)$''',
+    '''(go\.mod|go\.sum)$'''
+]
 
 [[rules]]
 id = "aws-access-key"
@@ -203,7 +211,3 @@ id = "pypi-upload-token"
 description = "PyPI upload token"
 regex = '''pypi-AgEIcHlwaS5vcmc[A-Za-z0-9-_]{50,1000}'''
 tags = ["key", "pypi"]
-
-[allowlist]
-description = "Allowlisted paths"
-paths = ['''^\.?gitleaks.toml$''', '''(.*?)(png|jpg|gif|doc|docx|pdf|bin|xls|pyc|zip)$''', '''(go.mod|go.sum)$''']
