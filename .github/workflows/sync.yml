@@ -1,3 +1,4 @@
+---
 name: "Sync CI"
 
 "on":
@@ -11,6 +12,11 @@ name: "Sync CI"
     - cron: '0 12 * * 1'
   # run manually
   workflow_dispatch:
+
+concurrency:
+  group: >-
+    ${{github.workflow}}-${{github.event.pull_request.number || github.ref}}
+  cancel-in-progress: ${{github.ref != 'refs/heads/main'}}
 
 jobs:
   sync_config:
@@ -27,34 +33,34 @@ jobs:
       contents: read
 
     steps:
-      - name: StepSecurity - Harden Github-hosted Runners
+      - name: StepSecurity - Harden GitHub-hosted Runners
         uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e  # v2.14.2
         with:
           egress-policy: audit
           disable-telemetry: true
-          disable-sudo: true
+          disable-sudo-and-containers: true
 
       - name: Git - Checkout
         id: git_checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
         uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf  # v2.2.1
         with:
-          app-id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
-          private-key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
+          app-id: ${{secrets.REPOSITORY_ASSISTANT_APP_ID}}
+          private-key: ${{secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY}}
 
       - name: GitHub - Sync Repository Configuration
         id: github_sync_repo_config
         uses: BetaHuhn/repo-file-sync-action@8b92be3375cf1d1b0cd579af488a9255572e4619  # v1.21.1
         with:
-          GH_INSTALLATION_TOKEN: ${{ steps.github_generate_app_token.outputs.token }}
+          GH_INSTALLATION_TOKEN: ${{steps.github_generate_app_token.outputs.token}}
           PR_LABELS: configuration
           ASSIGNEES: busybeaver
           REVIEWERS: busybeaver
           COMMIT_PREFIX: "chore: "
           COMMIT_BODY: "Synchronize Repository Configuration"
           PR_BODY: "Synchronize Repository Configuration"
-          GIT_EMAIL: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}+repository-assistant[bot]@users.noreply.github.com
+          GIT_EMAIL: ${{secrets.REPOSITORY_ASSISTANT_APP_ID}}+repository-assistant[bot]@users.noreply.github.com
           GIT_USERNAME: repository-assistant[bot]

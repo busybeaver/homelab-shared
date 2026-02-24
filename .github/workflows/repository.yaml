@@ -1,3 +1,4 @@
+---
 name: "Repository CI"
 
 "on":
@@ -6,10 +7,6 @@ name: "Repository CI"
     branches:
       - main
       - gh-readonly-queue/main/**
-  # run on pull requests that target the main branch
-  pull_request:
-    branches:
-      - main
   # run on pull request events
   pull_request_target:
     types:
@@ -17,7 +14,6 @@ name: "Repository CI"
       - synchronize
       - edited
       - reopened
-      # - review_requested
     branches:
       - main
   # allows to reuse the workflow in other repositories
@@ -30,6 +26,11 @@ name: "Repository CI"
         description: The private key of the repository assistant GitHub app
         required: true
 
+concurrency:
+  group: >-
+    ${{github.workflow}}-${{github.event.pull_request.number || github.ref}}
+  cancel-in-progress: ${{github.ref != 'refs/heads/main'}}
+
 jobs:
   pr_auto_approve:
     name: 'Auto Approve PR'
@@ -38,7 +39,10 @@ jobs:
 
     # only auto-approve PRs that were opened by renovate or the snap-package updater
     # (but do NOT auto approve major updates)
-    if: github.event_name == 'pull_request_target' && (github.actor == 'renovate[bot]' || github.actor == 'snap-package-updater[bot]') && !contains(github.event.pull_request.labels.*.name, 'major-update')
+    if: >-
+      github.event_name == 'pull_request_target' &&
+      (github.actor == 'renovate[bot]' || github.actor == 'snap-package-updater[bot]') &&
+      !contains(github.event.pull_request.labels.*.name, 'major-update')
 
     defaults:
       run:
@@ -49,25 +53,25 @@ jobs:
       contents: read
 
     steps:
-      - name: StepSecurity - Harden Github-hosted Runners
+      - name: StepSecurity - Harden GitHub-hosted Runners
         uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e  # v2.14.2
         with:
           egress-policy: audit
           disable-telemetry: true
-          disable-sudo: true
+          disable-sudo-and-containers: true
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
         uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf  # v2.2.1
         with:
-          app-id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
-          private-key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
+          app-id: ${{secrets.REPOSITORY_ASSISTANT_APP_ID}}
+          private-key: ${{secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY}}
 
       - name: GitHub - Auto Approve Pull Request
         id: github_auto_approve_pr
         uses: hmarr/auto-approve-action@f0939ea97e9205ef24d872e76833fa908a770363  # v4.0.0
         with:
-          github-token: ${{ steps.github_generate_app_token.outputs.token }}
+          github-token: ${{steps.github_generate_app_token.outputs.token}}
 
   pr_auto_merge:
     name: 'Enable Auto Merge PR'
@@ -75,7 +79,9 @@ jobs:
     timeout-minutes: 5
 
     # only auto-merge PRs that were opened by renovate or the snap-package updater
-    if: github.event_name == 'pull_request_target' && (github.actor == 'renovate[bot]' || github.actor == 'snap-package-updater[bot]')
+    if: >-
+      github.event_name == 'pull_request_target' &&
+      (github.actor == 'renovate[bot]' || github.actor == 'snap-package-updater[bot]')
 
     defaults:
       run:
@@ -86,26 +92,26 @@ jobs:
       contents: read
 
     steps:
-      - name: StepSecurity - Harden Github-hosted Runners
+      - name: StepSecurity - Harden GitHub-hosted Runners
         uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e  # v2.14.2
         with:
           egress-policy: audit
           disable-telemetry: true
-          disable-sudo: true
+          disable-sudo-and-containers: true
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
         uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf  # v2.2.1
         with:
-          app-id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
-          private-key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
+          app-id: ${{secrets.REPOSITORY_ASSISTANT_APP_ID}}
+          private-key: ${{secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY}}
 
       - name: GitHub - Enable PR Auto Merge
         id: github_enable_pr_auto_merge
         uses: peter-evans/enable-pull-request-automerge@a660677d5469627102a1c1e11409dd063606628d  # v3.0.0
         with:
-          token: ${{ steps.github_generate_app_token.outputs.token }}
-          pull-request-number: ${{ github.event.pull_request.number }}
+          token: ${{steps.github_generate_app_token.outputs.token}}
+          pull-request-number: ${{github.event.pull_request.number}}
           merge-method: squash
 
   semantic_pull_request:
@@ -113,8 +119,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
-    # run on all pull requests
-    if: github.event_name == 'pull_request_target'
+    # run on all pull requests, unless skipped via label
+    if: >-
+      github.event_name == 'pull_request_target' &&
+      !contains(github.event.pull_request.labels.*.name, 'skip-semantic-pull-request')
+
+    continue-on-error: true
 
     defaults:
       run:
@@ -125,25 +135,25 @@ jobs:
       contents: read
 
     steps:
-      - name: StepSecurity - Harden Github-hosted Runners
+      - name: StepSecurity - Harden GitHub-hosted Runners
         uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e  # v2.14.2
         with:
           egress-policy: audit
           disable-telemetry: true
-          disable-sudo: true
+          disable-sudo-and-containers: true
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
         uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf  # v2.2.1
         with:
-          app-id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
-          private-key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
+          app-id: ${{secrets.REPOSITORY_ASSISTANT_APP_ID}}
+          private-key: ${{secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY}}
 
       - name: GitHub - Semantic Pull Request
         id: github_semantic_pull_request
         uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50  # v6.1.1
         env:
-          GITHUB_TOKEN: ${{ steps.github_generate_app_token.outputs.token }}
+          GITHUB_TOKEN: ${{steps.github_generate_app_token.outputs.token}}
 
   conventional_commits:
     name: 'Conventional Commits Verification'
@@ -151,6 +161,9 @@ jobs:
     timeout-minutes: 5
 
     # run on all commits and pull requests
+    if: >-
+      github.event_name == 'push' ||
+      github.event_name == 'pull_request_target'
 
     defaults:
       run:
@@ -161,19 +174,19 @@ jobs:
       contents: read
 
     steps:
-      - name: StepSecurity - Harden Github-hosted Runners
+      - name: StepSecurity - Harden GitHub-hosted Runners
         uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e  # v2.14.2
         with:
           egress-policy: audit
           disable-telemetry: true
-          disable-sudo: true
+          disable-sudo-and-containers: true
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
         uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf  # v2.2.1
         with:
-          app-id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
-          private-key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
+          app-id: ${{secrets.REPOSITORY_ASSISTANT_APP_ID}}
+          private-key: ${{secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY}}
 
       - name: GitHub - Conventional Commit Messages
         id: github_conventional_commit_messages
@@ -181,7 +194,7 @@ jobs:
         with:
           pattern: ^(?:Merge branch \')|(?:(?:feat|fix|build|chore|ci|docs|style|refactor|perf|test)(?:\((?:\w|\s|\-|_)+\))?(?:!)?:\s\w+)
           error: 'The commit message title did not follow the conventional commits specification'
-          excludeDescription: 'true' # excludes the description body of a pull request
-          excludeTitle: 'true' # excludes the title of a pull request
-          checkAllCommitMessages: 'true' # check all commits associated with a pull request
-          accessToken: ${{ steps.github_generate_app_token.outputs.token }}
+          excludeDescription: 'true'  # excludes the description body of a pull request
+          excludeTitle: 'true'  # excludes the title of a pull request
+          checkAllCommitMessages: 'true'  # check all commits associated with a pull request
+          accessToken: ${{steps.github_generate_app_token.outputs.token}}
