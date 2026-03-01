@@ -1,3 +1,4 @@
+---
 name: "Repository CI"
 
 "on":
@@ -61,8 +62,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: >-
-          step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e
+        uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -70,16 +70,14 @@ jobs:
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
-        uses: >-
-          actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf
+        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf
         with:
           app-id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
           private-key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
 
       - name: GitHub - Auto Approve Pull Request
         id: github_auto_approve_pr
-        uses: >-
-          hmarr/auto-approve-action@f0939ea97e9205ef24d872e76833fa908a770363
+        uses: hmarr/auto-approve-action@f0939ea97e9205ef24d872e76833fa908a770363
         with:
           github-token: ${{ steps.github_generate_app_token.outputs.token }}
 
@@ -104,8 +102,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: >-
-          step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e
+        uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -113,8 +110,7 @@ jobs:
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
-        uses: >-
-          actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf
+        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf
         with:
           app-id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
           private-key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
@@ -146,8 +142,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: >-
-          step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e
+        uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -155,16 +150,14 @@ jobs:
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
-        uses: >-
-          actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf
+        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf
         with:
           app-id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
           private-key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
 
       - name: GitHub - Semantic Pull Request
         id: github_semantic_pull_request
-        uses: >-
-          amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50
+        uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50
         env:
           GITHUB_TOKEN: ${{ steps.github_generate_app_token.outputs.token }}
 
@@ -185,8 +178,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: >-
-          step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e
+        uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -194,16 +186,14 @@ jobs:
 
       - name: GitHub - Generate App Token
         id: github_generate_app_token
-        uses: >-
-          actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf
+        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf
         with:
           app-id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
           private-key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
 
       - name: GitHub - Conventional Commit Messages
         id: github_conventional_commit_messages
-        uses: >-
-          gsactions/commit-message-checker@16fa2d5de096ae0d35626443bcd24f1e756cafee
+        uses: gsactions/commit-message-checker@16fa2d5de096ae0d35626443bcd24f1e756cafee
         with:
           pattern: >-
             ^(?:Merge branch \')|(?:(?:feat|fix|build|chore|ci|docs|style|refactor|perf|test)(?:\((?:\w|\s|\-|_)+\))?(?:!)?:\s\w+)

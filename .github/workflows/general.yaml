@@ -1,3 +1,4 @@
+---
 name: 'General CI'
 
 "on":
@@ -80,8 +81,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: >-
-          step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e
+        uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -89,8 +89,7 @@ jobs:
 
       - name: Git - Checkout
         id: git_checkout
-        uses: >-
-          actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           # full history for GitLeaks
           fetch-depth: 0
@@ -129,8 +128,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: >-
-          step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e
+        uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -138,8 +136,7 @@ jobs:
 
       - name: Git - Checkout
         id: git_checkout
-        uses: >-
-          actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           # full history for Git Guardian
           fetch-depth: 0
@@ -171,8 +168,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: >-
-          step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e
+        uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -180,8 +176,7 @@ jobs:
 
       - name: Git - Checkout
         id: git_checkout
-        uses: >-
-          actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: Cosign - Setup
         id: cosign_setup
