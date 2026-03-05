@@ -25,12 +25,10 @@ name: "Repository CI"
   workflow_call:
     secrets:
       REPOSITORY_ASSISTANT_APP_ID:
-        description: >-
-          The application ID of the repository assistant GitHub app
+        description: 'The application ID of the repository assistant GitHub app'
         required: true
       REPOSITORY_ASSISTANT_PRIVATE_KEY:
-        description: >-
-          The private key of the repository assistant GitHub app
+        description: 'The private key of the repository assistant GitHub app'
         required: true
 
 jobs:
@@ -188,9 +186,7 @@ jobs:
         with:
           pattern: >-
             ^(?:Merge branch \')|(?:(?:feat|fix|build|chore|ci|docs|style|refactor|perf|test)(?:\((?:\w|\s|\-|_)+\))?(?:!)?:\s\w+)
-          error: >-
-            The commit message title did not follow the conventional
-            commits specification
+          error: 'The commit message title did not follow the conventional commits specification'
           excludeDescription: 'true'  # excludes the description body of a pull request
           excludeTitle: 'true'  # excludes the title of a pull request
           checkAllCommitMessages: 'true'  # check all commits associated with a pull request

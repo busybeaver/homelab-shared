@@ -1,3 +1,18 @@
+---
 extends:
   - .lefthook/lefthook-commit-message.yml
   - .lefthook/lefthook-dprint.yml
+pre-commit:
+  parallel: true
+  commands:
+    format:
+      # since dprint currently has some issues with formatting Dockerfiles, we don't do it during pre-commit
+      # glob: "{Dockerfile,*.ts,*.tsx,*.js,*.jsx,*.cjs,*.mjs,*.json,*.md,*.toml}"
+      glob: "{*.ts,*.tsx,*.js,*.jsx,*.cjs,*.mjs,*.json,*.md,*.toml}"
+      exclude: ".*-lock\\.json$"
+      run: just format {staged_files} && git add {staged_files}
+commit-msg:
+  parallel: true
+  scripts:
+    "semantic-commit-message":
+      runner: bash

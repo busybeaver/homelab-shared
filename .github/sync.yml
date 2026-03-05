@@ -1,3 +1,4 @@
+---
 group:
   repos: |
     busybeaver/homelab-iac
@@ -14,3 +15,4 @@ group:
     - .comet.json
     - .editorconfig
     - dprint.json
+ignored:
