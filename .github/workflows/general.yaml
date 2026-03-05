@@ -102,7 +102,7 @@ jobs:
 
       - name: SuperLinter - Lint Files
         id: superlinter_scan
-        uses: super-linter/super-linter@b92721f792f381cedc002ecdbb9847a15ece5bb8  # v7.1.0
+        uses: super-linter/super-linter/slim@b92721f792f381cedc002ecdbb9847a15ece5bb8  # v7.1.0
 
   git_secrets:
     name: 'Git Secret Exposure Checks'
@@ -135,7 +135,7 @@ jobs:
 
       - name: GitGuardian - Scan For Commited Secrets
         id: gitguardian_scan
-        uses: GitGuardian/ggshield-action@f975da1a8f9f2b70923ecb0d3b5a2b31bd9e  # v1.48.0
+        uses: GitGuardian/ggshield-action@50c99a7fbe0e313f962dc5bb74d8271e02543c3a  # v1.48.0
         continue-on-error: true  # TODO: workaround for checkout#1169
         env:
           GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
@@ -171,7 +171,7 @@ jobs:
 
       - name: Cosign - Setup
         id: cosign_setup
-        uses: sigstore/cosign-installer@11086d25041f77fe8fe7b9ea4e48e3b9192b8f19  # v3.1.2
+        uses: sigstore/cosign-installer@faadad0cce49287aee09b3a48701e75088a2c6ad  # v4.0.0
         with:
           cosign-release: ${{ env.COSIGN_VERSION }}
 
