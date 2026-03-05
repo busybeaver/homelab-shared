@@ -170,7 +170,7 @@ tags = ["key", "twilio"]
 
 [[rules]]
 id = "dynatrace-token"
-description = "Dynatrace ttoken"
+description = "Dynatrace token"
 regex = '''dt0[a-zA-Z]{1}[0-9]{2}\.[A-Z0-9]{24}\.[A-Z0-9]{64}'''
 tags = ["key", "Dynatrace"]
 
@@ -206,4 +206,8 @@ tags = ["key", "pypi"]
 
 [allowlist]
 description = "Allowlisted files"
-paths = ['''^\.?gitleaks.toml$''', '''(.*?)(png|jpg|gif|doc|docx|pdf|bin|xls|pyc|zip)$''', '''(go.mod|go.sum)$''']
+paths = [
+  '''^\.?gitleaks.toml$''',
+  '''(.*?)(png|jpg|gif|doc|docx|pdf|bin|xls|pyc|zip)$''',
+  '''(go.mod|go.sum)$'''
+]
