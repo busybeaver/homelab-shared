@@ -57,7 +57,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@c95a14d0e5bab51a9f56296a4eb0e416910cd350  # v2.10.3
+        uses: step-security/harden-runner@a90bcbc6539c36a85cdfeb73f7e2f433735f215b  # v2.15.0
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -96,7 +96,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@c95a14d0e5bab51a9f56296a4eb0e416910cd350  # v2.10.3
+        uses: step-security/harden-runner@a90bcbc6539c36a85cdfeb73f7e2f433735f215b  # v2.15.0
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -135,7 +135,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@c95a14d0e5bab51a9f56296a4eb0e416910cd350  # v2.10.3
+        uses: step-security/harden-runner@a90bcbc6539c36a85cdfeb73f7e2f433735f215b  # v2.15.0
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -171,7 +171,7 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
-        uses: step-security/harden-runner@c95a14d0e5bab51a9f56296a4eb0e416910cd350  # v2.10.3
+        uses: step-security/harden-runner@a90bcbc6539c36a85cdfeb73f7e2f433735f215b  # v2.15.0
         with:
           egress-policy: audit
           disable-telemetry: true
@@ -188,8 +188,7 @@ jobs:
         id: github_conventional_commit_messages
         uses: gsactions/commit-message-checker@16fa2d5de096ae0d35626443bcd24f1e756cafee  # v2.0.0
         with:
-          pattern: |
-            ^(?:Merge branch \')|(?:(?:feat|fix|build|chore|ci|docs|style|refactor|perf|test)(?:\((?:\w|\s|\-|_)+\))?(?:!)?:\s\w+)
+          pattern: ^(?:Merge branch \')|(?:(?:feat|fix|build|chore|ci|docs|style|refactor|perf|test)(?:\((?:\w|\s|\-|_)+\))?(?:!)?:\s\w+)  # yamllint disable-line rule:line-length
           error: 'The commit message title did not follow the conventional commits specification'
           excludeDescription: 'true'
           excludeTitle: 'true'
