@@ -75,9 +75,18 @@ jobs:
       - name: StepSecurity - Harden Github-hosted Runners
         uses: step-security/harden-runner@a90bcbc6539c36a85cdfeb73f7e2f433735f215b  # v2.15.0
         with:
-          egress-policy: audit
+          egress-policy: block
           disable-telemetry: true
           disable-sudo: true
+          allowed-endpoints: >
+            api.github.com:443
+            fulcio.sigstore.dev:443
+            github.com:443
+            objects.githubusercontent.com:443
+            raw.githubusercontent.com:443
+            rekor.sigstore.dev:443
+            release-assets.githubusercontent.com:443
+            tuf-repo-cdn.sigstore.dev:443
 
       - name: Git - Checkout
         id: git_checkout
@@ -121,9 +130,14 @@ jobs:
       - name: StepSecurity - Harden Github-hosted Runners
         uses: step-security/harden-runner@a90bcbc6539c36a85cdfeb73f7e2f433735f215b  # v2.15.0
         with:
-          egress-policy: audit
+          egress-policy: block
           disable-telemetry: true
           disable-sudo: true
+          allowed-endpoints: >
+            api.gitguardian.com:443
+            api.github.com:443
+            dashboard.gitguardian.com:443
+            github.com:443
 
       - name: Git - Checkout
         id: git_checkout
@@ -135,7 +149,7 @@ jobs:
       - name: GitGuardian - Scan For Commited Secrets
         id: gitguardian_scan
         uses: GitGuardian/ggshield-action@50c99a7fbe0e313f962dc5bb74d8271e02543c3a  # v1.48.0
-        continue-on-error: true  # TODO: workaround for checkout issue
+
         env:
           GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
 
@@ -160,9 +174,18 @@ jobs:
       - name: StepSecurity - Harden Github-hosted Runners
         uses: step-security/harden-runner@a90bcbc6539c36a85cdfeb73f7e2f433735f215b  # v2.15.0
         with:
-          egress-policy: audit
+          egress-policy: block
           disable-telemetry: true
           disable-sudo-and-containers: true
+          allowed-endpoints: >
+            api.github.com:443
+            fulcio.sigstore.dev:443
+            github.com:443
+            objects.githubusercontent.com:443
+            raw.githubusercontent.com:443
+            rekor.sigstore.dev:443
+            release-assets.githubusercontent.com:443
+            tuf-repo-cdn.sigstore.dev:443
 
       - name: Git - Checkout
         id: git_checkout
