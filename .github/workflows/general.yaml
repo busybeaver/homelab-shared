@@ -83,6 +83,7 @@ jobs:
             github.com:443
             objects.githubusercontent.com:443
             raw.githubusercontent.com:443
+            release-assets.githubusercontent.com:443
 
       - name: Git - Checkout
         id: git_checkout
@@ -131,6 +132,7 @@ jobs:
           disable-sudo: true
           allowed-endpoints: >
             api.github.com:443
+            api.gitguardian.com:443
             dashboard.gitguardian.com:443
             github.com:443
 
@@ -175,6 +177,8 @@ jobs:
           allowed-endpoints: >
             api.github.com:443
             github.com:443
+            objects.githubusercontent.com:443
+            release-assets.githubusercontent.com:443
 
       - name: Git - Checkout
         id: git_checkout
