@@ -80,10 +80,14 @@ jobs:
           disable-sudo: true
           allowed-endpoints: >
             api.github.com:443
+            fulcio.sigstore.dev:443
             github.com:443
             objects.githubusercontent.com:443
             raw.githubusercontent.com:443
+            rekor.sigstore.dev:443
             release-assets.githubusercontent.com:443
+            tuf-repo-cdn.sigstore.dev:443
+
       - name: Git - Checkout
         id: git_checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
@@ -134,6 +138,7 @@ jobs:
             api.github.com:443
             dashboard.gitguardian.com:443
             github.com:443
+
       - name: Git - Checkout
         id: git_checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
@@ -174,10 +179,14 @@ jobs:
           disable-sudo-and-containers: true
           allowed-endpoints: >
             api.github.com:443
+            fulcio.sigstore.dev:443
             github.com:443
             objects.githubusercontent.com:443
             raw.githubusercontent.com:443
+            rekor.sigstore.dev:443
             release-assets.githubusercontent.com:443
+            tuf-repo-cdn.sigstore.dev:443
+
       - name: Git - Checkout
         id: git_checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
