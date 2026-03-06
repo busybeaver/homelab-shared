@@ -50,12 +50,66 @@ jobs:
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
+        # v2.14.2
         # yamllint disable-line rule:line-length
-        uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e  # v2.14.2
+        uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e
         with:
           egress-policy: audit
           disable-telemetry: true
           disable-sudo: true
 
-      - name: GitHub - Implement Me
-        run: echo "Implement Me"
+      - name: Git - Checkout
+        id: git_checkout
+        # v4.2.2
+        # yamllint disable-line rule:line-length
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          # required by tj-actions/changed-files
+          fetch-depth: 2
+
+      - name: Cosign - Setup
+        id: cosign_setup
+        # v4.0.0
+        # yamllint disable-line rule:line-length
+        uses: sigstore/cosign-installer@faadad0cce49287aee09b3a48701e75088a2c6ad
+        with:
+          cosign-release: ${{env.COSIGN_VERSION}}
+
+      - name: Git - Get Changed Files
+        id: git_changed_files
+        # v47.0.2
+        # yamllint disable-line rule:line-length
+        uses: tj-actions/changed-files@8cba46e29c11878d930bca7870bb54394d3e8b21
+        with:
+          files: |
+            ./public_key/cosign.pub
+
+      - name: Docker - Log into Registry
+        id: docker_login
+        # v3.7.0
+        # yamllint disable-line rule:line-length
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9
+        # if: steps.git_changed_files.outputs.any_changed == 'true'
+        with:
+          registry: ${{env.REGISTRY}}
+          username: ${{github.actor}}
+          password: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Cosign - Upload and Sign Public Key
+        id: cosign_sign
+        run: |
+          ARTIFACT="${{env.REGISTRY}}/${{github.repository}}/cosign.pub"
+          cosign upload blob -f cosign.pub --verbose \
+            -a "repo=${{github.repository}}" \
+            -a "workflow=${{github.workflow}}" \
+            -a "ref=${{github.sha}}" \
+            "${ARTIFACT}"
+          cosign sign --key env://COSIGN_PRIVATE_KEY --verbose \
+            -a "repo=${{github.repository}}" \
+            -a "workflow=${{github.workflow}}" \
+            -a "ref=${{github.sha}}" \
+            "${ARTIFACT}"
+        working-directory: ./public_key/
+        env:
+          COSIGN_PRIVATE_KEY: ${{secrets.COSIGN_PRIVATE_KEY}}
+          COSIGN_PASSWORD: ${{secrets.COSIGN_PASSWORD}}
