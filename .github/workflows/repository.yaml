@@ -68,7 +68,6 @@ jobs:
           allowed-endpoints: >
             api.github.com:443
             github.com:443
-
       - name: GitHub - Generate App Token
         id: github_generate_app_token
         uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf  # v2.2.1
@@ -112,7 +111,6 @@ jobs:
           allowed-endpoints: >
             api.github.com:443
             github.com:443
-
       - name: GitHub - Generate App Token
         id: github_generate_app_token
         uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf  # v2.2.1
@@ -154,7 +152,6 @@ jobs:
           allowed-endpoints: >
             api.github.com:443
             github.com:443
-
       - name: GitHub - Generate App Token
         id: github_generate_app_token
         uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf  # v2.2.1
@@ -196,7 +193,6 @@ jobs:
           allowed-endpoints: >
             api.github.com:443
             github.com:443
-
       - name: GitHub - Generate App Token
         id: github_generate_app_token
         uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf  # v2.2.1
