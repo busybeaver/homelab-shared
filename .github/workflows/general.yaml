@@ -148,7 +148,7 @@ jobs:
 
       - name: GitGuardian - Scan For Commited Secrets
         id: gitguardian_scan
-        uses: GitGuardian/ggshield-action@16a0afce4785690fa602b6dbabf60ed22a4a854b  # v1.52.1
+        uses: GitGuardian/ggshield-action@da20be06cafe5e8633dc24744efe1efe8d30f06b  # v1.52.2
 
         env:
           GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
