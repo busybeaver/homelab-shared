@@ -7,10 +7,6 @@ name: "Repository CI"
     branches:
       - main
       - gh-readonly-queue/main/**
-  # run on pull requests that target the main branch
-  pull_request:
-    branches:
-      - main
   # run on pull request events
   pull_request_target:
     types:
