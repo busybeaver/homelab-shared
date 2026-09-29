@@ -52,6 +52,11 @@ jobs:
         with:
           app-id: ${{ secrets.REPOSITORY_ASSISTANT_APP_ID }}
           private-key: ${{ secrets.REPOSITORY_ASSISTANT_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: |
+            homelab-iac
+            homelab-packages
+            homelab-services
 
       - name: GitHub - Sync Repository Configuration
         id: github_sync_repo_config
