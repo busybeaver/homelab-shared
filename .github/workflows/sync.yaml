@@ -18,6 +18,9 @@ concurrency:
     ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
+permissions:
+  contents: read
+
 jobs:
   sync_config:
     name: 'Sync Repository Configuration'
@@ -30,7 +33,8 @@ jobs:
         working-directory: '.'
 
     permissions:
-      contents: read
+      contents: write
+      pull-requests: write
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
