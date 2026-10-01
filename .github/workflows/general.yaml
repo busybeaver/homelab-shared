@@ -40,6 +40,9 @@ concurrency:
     ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
+permissions:
+  contents: read
+
 jobs:
   code_quality:
     name: 'Code Quality Checks'
@@ -148,6 +151,7 @@ jobs:
 
       - name: GitGuardian - Scan For Commited Secrets
         id: gitguardian_scan
+        if: ${{ secrets.GITGUARDIAN_API_KEY != '' }}
         uses: GitGuardian/ggshield-action@7f66d3be9c59a821dcf4f45ee5d929203a1a0b90  # v1.55.0
 
         env:

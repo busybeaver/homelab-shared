@@ -15,6 +15,9 @@ concurrency:
     ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
+permissions:
+  contents: read
+
 jobs:
   semantic_versioning:
     name: 'Semantic Versioning'
@@ -25,9 +28,8 @@ jobs:
     # - the triggering workflows finished with success
     # - the build runs on the default branch
     if: >-
-      github.event_name == 'workflow_run' &&
       github.event.workflow_run.conclusion == 'success' &&
-      github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+      github.event.workflow_run.head_branch == github.event.repository.default_branch
 
     defaults:
       run:
@@ -35,7 +37,7 @@ jobs:
         working-directory: '.'
 
     permissions:
-      contents: read
+      contents: write
 
     steps:
       - name: StepSecurity - Harden Github-hosted Runners
