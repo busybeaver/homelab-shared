@@ -1,16 +1,25 @@
 group:
-  repos: |
-    busybeaver/homelab-iac
-    busybeaver/homelab-packages
-    busybeaver/homelab-services
-  files:
-    - .github/linters/
-    - .github/act_event.json
-    - .github/CODEOWNERS
-    - .github/justfile.shared
-    - .lefthook/
-    - public_key/
-    - .actrc
-    - .comet.json
-    - .editorconfig
-    - dprint.json
+  - repos: |
+      busybeaver/homelab-iac
+      busybeaver/homelab-packages
+    files:
+      - .github/linters/
+      - .github/act_event.json
+      - .github/CODEOWNERS
+      - .github/justfile.shared
+      - .lefthook/
+      - public_key/
+      - .actrc
+      - .comet.json
+      - .editorconfig
+      - dprint.json
+  # homelab-services uses mise (mise.toml) instead of just, dprint, comet and the shared lefthook config
+  - repos: |
+      busybeaver/homelab-services
+    files:
+      - .github/linters/
+      - .github/act_event.json
+      - .github/CODEOWNERS
+      - public_key/
+      - .actrc
+      - .editorconfig
