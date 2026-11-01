@@ -56,7 +56,6 @@ jobs:
           repositories: |
             homelab-iac
             homelab-packages
-            homelab-services
 
       - name: GitHub - Sync Repository Configuration
         id: github_sync_repo_config
