@@ -10,38 +10,43 @@
     ":enableVulnerabilityAlerts",
     ":disableDependencyDashboard",
     "helpers:pinGitHubActionDigests",
-    "regexManagers:githubActionsVersions"
+    "customManagers:githubActionsVersions"
   ],
   "labels": ["dependencies"],
-  "rollbackPrs": true,
+  // supply-chain cooldown: an update waits until its release is old enough (default 3 days, per update type below);
+  // with "strict" internal checks, Renovate creates no branch (and no CI run with the new dependency) before that
+  "minimumReleaseAge": "3 days",
+  "internalChecksFilter": "strict",
+  // no rollback PRs: they proposed downgrades whenever a datasource stopped listing a pinned version
+  "rollbackPrs": false,
   "packageRules": [
     {
       "description": "Dependency maintenance tasks",
       "matchUpdateTypes": ["pin", "lockFileMaintenance"],
-      "stabilityDays": 0,
+      "minimumReleaseAge": "0 days",
       "assignees": ["busybeaver"],
       "reviewers": ["repository-assistant[bot]"],
     },
     {
       "description": "Minor and patch-level updates with usually no breaking changes",
       "matchUpdateTypes": ["minor", "patch", "digest"],
-      // npm packages less than 72 hours (3 days) old can be unpublished
-      "stabilityDays": 3,
+      // most compromised releases are detected within days; npm packages can be unpublished within 72 hours
+      "minimumReleaseAge": "3 days",
       "assignees": ["busybeaver"],
       "reviewers": ["repository-assistant[bot]"],
     },
     {
       "description": "Major updates with potentially breaking changes",
       "matchUpdateTypes": ["major"],
-      "stabilityDays": 5,
+      "minimumReleaseAge": "5 days",
       "assignees": ["busybeaver"],
       "reviewers": ["busybeaver"],
       "addLabels": ["major-update"],
     },
     {
       "groupName": "shared-workflows",
-      "matchPackagePatterns": [
-        "^busybeaver/homelab-shared.*"
+      "matchPackageNames": [
+        "/^busybeaver/homelab-shared/"
       ]
     }
   ],
