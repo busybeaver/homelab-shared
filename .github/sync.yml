@@ -1,7 +1,6 @@
 group:
   - repos: |
       busybeaver/homelab-iac
-      busybeaver/homelab-packages
     files:
       - .github/linters/
       - .github/act_event.json
@@ -13,3 +12,13 @@ group:
       - .comet.json
       - .editorconfig
       - dprint.json
+  # homelab-packages uses mise (mise.toml) instead of just, dprint, comet and the shared lefthook config
+  - repos: |
+      busybeaver/homelab-packages
+    files:
+      - .github/linters/
+      - .github/act_event.json
+      - .github/CODEOWNERS
+      - public_key/
+      - .actrc
+      - .editorconfig
